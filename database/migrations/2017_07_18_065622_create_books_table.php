@@ -16,7 +16,7 @@ class CreateBooksTable extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->integer('time');
+            $table->string('time');
             $table->integer('page_number')->nullable();
             $table->string('publisher');
             $table->string('audio_publisher')->nullable();
