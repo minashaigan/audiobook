@@ -17,7 +17,7 @@ class CreateBookNarratorTable extends Migration
             $table->increments('id');
             $table->integer('book_id')->unsigned();
             $table->integer('narrator_id')->unsigned();
-            $table->unique( array('book_id','author_id') );
+            $table->unique( array('book_id','narrator_id') );
             $table->timestamps();
         });
     }
