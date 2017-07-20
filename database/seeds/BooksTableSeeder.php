@@ -11,6 +11,10 @@ class BooksTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert(['name' => 'book1','time'=>'	2 ساعت و 26 دقیقه','publisher'=>'publisher','publish_year'=>1396,'file'=>'kjghkkjsd.pdf']);
+        DB::table('books')->insert(['name' => 'book1','time'=>'2 ساعت و 26 دقیقه','publisher'=>'publisher','publish_year'=>1396,'file'=>'file1.pdf']);
+        DB::table('books')->insert(['name' => 'book2','time'=>'3 ساعت و 26 دقیقه','publisher'=>'publisher','publish_year'=>1397,'file'=>'file2.pdf']);
+        DB::table('books')->insert(['name' => 'book3','time'=>'4 ساعت و 26 دقیقه','publisher'=>'publisher','publish_year'=>1398,'file'=>'file3.pdf']);
+        DB::table('books')->insert(['name' => 'book4','time'=>'5 ساعت و 26 دقیقه','publisher'=>'publisher','publish_year'=>1399,'file'=>'file4.pdf']);
+        DB::table('books')->insert(['name' => 'book5','time'=>'6 ساعت و 26 دقیقه','publisher'=>'publisher','publish_year'=>1400,'file'=>'file5.pdf']);
     }
 }

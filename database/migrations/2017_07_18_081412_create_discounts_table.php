@@ -20,7 +20,7 @@ class CreateDiscountsTable extends Migration
             $table->integer('type')->default('0');
             $table->integer('value')->default('0');
 
-            $table->integer('book_id')->unsigned()->index();
+            $table->integer('subscription_id')->unsigned()->index();
 
             $table->timestamps();
 
