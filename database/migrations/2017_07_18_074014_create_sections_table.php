@@ -17,7 +17,7 @@ class CreateSectionsTable extends Migration
             $table->increments('id');
             $table->integer('chapter_number');
             $table->string('chapter_name');
-            $table->integer('time')->nullable();
+            $table->string('time')->nullable();
             $table->string('file')->nullable();
 
             $table->integer('book_id')->unsigned()->index();

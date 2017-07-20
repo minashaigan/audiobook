@@ -25,6 +25,7 @@ class CreateBooksTable extends Migration
             $table->string('language')->nullable();
             $table->text('summary')->nullable();
             $table->string('file');
+            $table->string('file_size')->nullable();
             $table->string('image')->nullable();
 
             $table->timestamps();

@@ -15,4 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('books','BookController');
+Route::resource('books','BookController',['except' => ['update','edit','create','destroy']]);

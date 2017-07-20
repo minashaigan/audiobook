@@ -21,5 +21,19 @@ class DatabaseSeeder extends Seeder
         $this->call(DiscountsTableSeeder::class);
         $this->call(SubscriptionsTableSeeder::class);
         $this->call(UserWantBookTableSeeder::class);
+        $this->call(UserGetBookTableSeeder::class);
+        $this->call(UserGenreTableSeeder::class);
+        $this->call(UserHasSubscriptionTableSeeder::class);
+        $this->call(UserReviewBookTableSeeder::class);
+        $this->call(UserReviewAuthorTableSeeder::class);
+        $this->call(UserReviewNarratorTableSeeder::class);
+        $this->call(BookTagTableSeeder::class);
+        $this->call(BookAuthorTableSeeder::class);
+        $this->call(BookNarratorTableSeeder::class);
+        $this->call(AuthorTagTableSeeder::class);
+        $this->call(BookGenreTableSeeder::class);
+        $this->call(AuthorGenreTableSeeder::class);
+        $this->call(NarratorGenreTableSeeder::class);
+        $this->call(NarratorTagTableSeeder::class);
     }
 }

@@ -11,7 +11,7 @@ class NarratorsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('narrators')->insert(['name' => 'narrator']);
-        DB::table('narrators')->insert(['name' => 'narrator','introduction'=>'intro']);
+        DB::table('narrators')->insert(['name' => 'narrator1']);
+        DB::table('narrators')->insert(['name' => 'narrator2','introduction'=>'intro1']);
     }
 }
