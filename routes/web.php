@@ -29,3 +29,8 @@ Route::resource('authors','AuthorController',['except' => ['update','edit','crea
 Route::resource('narrators','NarratorController',['except' => ['update','edit','create','destroy','store']]);
 
 /* End Narrators */
+
+/* Subscription */
+Route::resource('subscriptions','SubscriptionController',['except' => ['update','edit','create','destroy','store']]);
+
+/* End Subscription */
