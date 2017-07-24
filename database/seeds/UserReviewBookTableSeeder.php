@@ -11,10 +11,10 @@ class UserReviewBookTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('user_review_book')->insert(['user_id'=>1,'book_id'=>4,'comment'=>'co1']);
+        DB::table('user_review_book')->insert(['user_id'=>1,'book_id'=>1,'comment'=>'co1','rate'=>2,'enable'=>1]);
         DB::table('user_review_book')->insert(['user_id'=>1,'book_id'=>5,'comment'=>'co2','rate'=>3]);
-        DB::table('user_review_book')->insert(['user_id'=>2,'book_id'=>2,'comment'=>'co3','rate'=>4]);
-        DB::table('user_review_book')->insert(['user_id'=>2,'book_id'=>3,'comment'=>'co4']);
-        DB::table('user_review_book')->insert(['user_id'=>2,'book_id'=>4,'comment'=>'co5']);
+        DB::table('user_review_book')->insert(['user_id'=>2,'book_id'=>2,'comment'=>'co3','rate'=>4,'enable'=>1]);
+        DB::table('user_review_book')->insert(['user_id'=>2,'book_id'=>3,'comment'=>'co4','rate'=>5]);
+        DB::table('user_review_book')->insert(['user_id'=>2,'book_id'=>1,'comment'=>'co5','rate'=>1,'enable'=>1]);
     }
 }

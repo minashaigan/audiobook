@@ -16,6 +16,7 @@ class CreateBooksTable extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('description')->nullable();
             $table->string('time');
             $table->integer('page_number')->nullable();
             $table->string('publisher');
@@ -23,7 +24,7 @@ class CreateBooksTable extends Migration
             $table->integer('publish_year');
             $table->integer('audio_publish_year')->nullable();
             $table->string('language')->nullable();
-            $table->text('summary')->nullable();
+            $table->longText('summary')->nullable();
             $table->string('file');
             $table->string('file_size')->nullable();
             $table->string('image')->nullable();

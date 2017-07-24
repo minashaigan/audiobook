@@ -34,7 +34,7 @@ class Author extends Model
     public function reviews()
     {
         return $this->belongsToMany('App\User', 'user_review_author', 'author_id', 'user_id')
-        ->withPivot('commetn','rate','enable')
+        ->withPivot('comment','rate','enable')
             ->withTimestamps();
     }
     /**

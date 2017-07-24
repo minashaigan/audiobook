@@ -15,4 +15,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('books','BookController',['except' => ['update','edit','create','destroy']]);
+/* Books */
+Route::resource('books','BookController',['except' => ['update','edit','create','destroy','store']]);
+
+/* End Books */
+
+/* Authors */
+Route::resource('authors','AuthorController',['except' => ['update','edit','create','destroy','store']]);
+
+/* End Authors */
+
+/* Narrators */
+Route::resource('narrators','NarratorController',['except' => ['update','edit','create','destroy','store']]);
+
+/* End Narrators */
