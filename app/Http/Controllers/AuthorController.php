@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Author;
+use App\Book;
+use App\Genre;
+use App\Tag;
+use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * 
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -45,9 +49,9 @@ class AuthorController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * 
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -128,5 +132,143 @@ class AuthorController extends Controller
         $author['reviews'] =  $author->reviews()->wherePivot('enable',1)->get();
         return response()->json(['data'=>['author'=>$author],'result'=>1,'description'=>'an author','message'=>'success']);
     }
-    
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function search(Request $request)
+    {
+        $search = [];
+        if($request->input('search')) {
+            $tags = Tag::where('name', 'like', $request->input('search'))->get();
+            if (count($tags)) {
+                foreach ($tags as $tag) {
+                    $authors = Author::whereHas('tags', function ($query) use ($tag) {
+                        $query->where('tag_id', $tag->id);
+                    })->distinct()->get();
+                    foreach ($authors as $author) {
+                        $author["genres"] = "";
+                        $counter = 0;
+                        foreach ($author->genres()->get() as $genre) {
+                            if ($counter)
+                                $author["genres"] = $author['genres'] . "," . $genre->name;
+                            else
+                                $author["genres"] = $genre->name;
+                            $counter++;
+                        }
+                        $rate_count = 0;
+                        $rate_value = 0;
+                        foreach ($author->reviews()->wherePivot('enable', 1)->get() as $review) {
+                            if ($review->pivot->rate) {
+                                $rate_count++;
+                                $rate_value += $review->pivot->rate;
+                            }
+                        }
+                        if ($rate_count == 0)
+                            $author['rate'] = 0;
+                        else
+                            $author['rate'] = $rate_value / $rate_count;
+                    }
+                    foreach ($authors as $author)
+                        $search[] = $author;
+                }
+            }
+            $genres = Genre::where('name', 'like', $request->input('search'))->get();
+            if (count($genres)) {
+                foreach ($genres as $genre) {
+                    $authors = Author::whereHas('genres', function ($query) use ($genre) {
+                        $query->where('genre_id', $genre->id);
+                    })->distinct()->get();
+                    foreach ($authors as $author) {
+                        $author["genres"] = "";
+                        $counter = 0;
+                        foreach ($author->genres()->get() as $genre) {
+                            if ($counter)
+                                $author["genres"] = $author['genres'] . "," . $genre->name;
+                            else
+                                $author["genres"] = $genre->name;
+                            $counter++;
+                        }
+                        $rate_count = 0;
+                        $rate_value = 0;
+                        foreach ($author->reviews()->wherePivot('enable', 1)->get() as $review) {
+                            if ($review->pivot->rate) {
+                                $rate_count++;
+                                $rate_value += $review->pivot->rate;
+                            }
+                        }
+                        if ($rate_count == 0)
+                            $author['rate'] = 0;
+                        else
+                            $author['rate'] = $rate_value / $rate_count;
+                    }
+                    foreach ($authors as $author)
+                        $search[] = $author;
+                }
+            }
+            $authors = Author::where('name', 'like', $request->input('search'))->get();
+            if (count($authors)) {
+                foreach ($authors as $author) {
+                    $author["genres"] = "";
+                    $counter = 0;
+                    foreach ($author->genres()->get() as $genre) {
+                        if ($counter)
+                            $author["genres"] = $author['genres'] . "," . $genre->name;
+                        else
+                            $author["genres"] = $genre->name;
+                        $counter++;
+                    }
+                    $rate_count = 0;
+                    $rate_value = 0;
+                    foreach ($author->reviews()->wherePivot('enable', 1)->get() as $review) {
+                        if ($review->pivot->rate) {
+                            $rate_count++;
+                            $rate_value += $review->pivot->rate;
+                        }
+                    }
+                    if ($rate_count == 0)
+                        $author['rate'] = 0;
+                    else
+                        $author['rate'] = $rate_value / $rate_count;
+
+                    $search[] = $author;
+                }
+            }
+            $books = Book::where('name', 'like', $request->input('search'))->get();
+            if (count($books)) {
+                foreach ($books as $book) {
+                    $authors = Author::whereHas('books', function ($query) use ($book) {
+                        $query->where('book_id', $book->id);
+                    })->distinct()->get();
+                    foreach ($authors as $author) {
+                        $author["genres"] = "";
+                        $counter = 0;
+                        foreach ($author->genres()->get() as $genre) {
+                            if ($counter)
+                                $author["genres"] = $author['genres'] . "," . $genre->name;
+                            else
+                                $author["genres"] = $genre->name;
+                            $counter++;
+                        }
+                        $rate_count = 0;
+                        $rate_value = 0;
+                        foreach ($author->reviews()->wherePivot('enable', 1)->get() as $review) {
+                            if ($review->pivot->rate) {
+                                $rate_count++;
+                                $rate_value += $review->pivot->rate;
+                            }
+                        }
+                        if ($rate_count == 0)
+                            $author['rate'] = 0;
+                        else
+                            $author['rate'] = $rate_value / $rate_count;
+                    }
+                    foreach ($authors as $author)
+                        $search[] = $author;
+                }
+            }
+        }
+        return response()->json(['data'=>['search_result'=>array_unique($search)],'result'=>1,'description'=>'list of authors by searching','message'=>'success']);
+    }
 }

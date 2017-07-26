@@ -17,17 +17,17 @@ Route::get('/', function () {
 
 /* Books */
 Route::resource('books','BookController',['except' => ['update','edit','create','destroy','store']]);
-
+Route::get('searchBook','BookController@search');
 /* End Books */
 
 /* Authors */
 Route::resource('authors','AuthorController',['except' => ['update','edit','create','destroy','store']]);
-
+Route::get('searchAuthor','AuthorController@search');
 /* End Authors */
 
 /* Narrators */
 Route::resource('narrators','NarratorController',['except' => ['update','edit','create','destroy','store']]);
-
+Route::get('searchNarrator','NarratorController@search');
 /* End Narrators */
 
 /* Subscription */
