@@ -26,6 +26,8 @@ class Subscription extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\User', 'user_has_subscription', 'subscription_id', 'user_id');
+        return $this->belongsToMany('App\User', 'user_has_subscription', 'subscription_id', 'user_id')
+            ->withPivot('paid')
+            ->withTimestamps();
     }
 }

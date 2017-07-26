@@ -11,7 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert(['name' => 'user1','email'=>'user1@yahoo.com','password'=>'123456','activated'=>'1']);
-        DB::table('users')->insert(['name' => 'user2','email'=>'user2@yahoo.com','password'=>'123456','activated'=>'0']);
+        DB::table('users')->insert(['name' => 'user1','email'=>'user1@yahoo.com','password'=>'123456','activated'=>'1','api_token'=>'Ur2jwparrXpPO5SsVwr1XuNlK5BlMu0X2k2KkJQM30PDpeCPaaH5lWgBpPC9']);
+        DB::table('users')->insert(['name' => 'user2','email'=>'user2@yahoo.com','password'=>'123456','activated'=>'0','api_token'=>'Ur2jwparrXpPO5SsVwr1XuNlK5BlMu0X2k2KkJQM30PDpeCPaaH5lWgBpPC9111']);
     }
 }

@@ -15,19 +15,28 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/* Users */
+Route::get('register', 'UserController@register');
+Route::get('login', 'UserController@login');
+Route::get('logout', ['middleware' => 'api', 'uses' => 'UserController@logout']);
+Route::get('buy/{id}', ['middleware' => 'api', 'uses' => 'UserController@buySubscription']);
+Route::post('buyVerify', ['middleware' => 'api', 'uses' => 'UserController@buySubscriptionVerify']);
+Route::get('getBook/{id}', ['middleware' => 'api', 'uses' => 'UserController@getBook']);
+/* End Users */
+
 /* Books */
-Route::resource('books','BookController',['except' => ['update','edit','create','destroy','store']]);
-Route::get('searchBook','BookController@search');
+Route::resource('books', 'BookController', ['except' => ['update', 'edit', 'create', 'destroy', 'store']]);
+Route::get('searchBook', 'BookController@search');
 /* End Books */
 
 /* Authors */
-Route::resource('authors','AuthorController',['except' => ['update','edit','create','destroy','store']]);
-Route::get('searchAuthor','AuthorController@search');
+Route::resource('authors', 'AuthorController', ['except' => ['update', 'edit', 'create', 'destroy', 'store']]);
+Route::get('searchAuthor', 'AuthorController@search');
 /* End Authors */
 
 /* Narrators */
-Route::resource('narrators','NarratorController',['except' => ['update','edit','create','destroy','store']]);
-Route::get('searchNarrator','NarratorController@search');
+Route::resource('narrators', 'NarratorController', ['except' => ['update', 'edit', 'create', 'destroy', 'store']]);
+Route::get('searchNarrator', 'NarratorController@search');
 /* End Narrators */
 
 /* Subscription */

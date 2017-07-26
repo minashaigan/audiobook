@@ -52,7 +52,9 @@ class User extends Authenticatable
      */
     public function subscriptions()
     {
-        return $this->belongsToMany('App\Subscription', 'user_has_subscription', 'user_id', 'subscription_id');
+        return $this->belongsToMany('App\Subscription', 'user_has_subscription', 'user_id', 'subscription_id')
+            ->withPivot('paid')
+            ->withTimestamps();
     }
     /**
      * The books that review by the user.
