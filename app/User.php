@@ -53,7 +53,7 @@ class User extends Authenticatable
     public function subscriptions()
     {
         return $this->belongsToMany('App\Subscription', 'user_has_subscription', 'user_id', 'subscription_id')
-            ->withPivot('paid')
+            ->withPivot('paid','expiration_date')
             ->withTimestamps();
     }
     /**
@@ -76,5 +76,12 @@ class User extends Authenticatable
     public function narrator_reviews()
     {
         return $this->belongsToMany('App\Narrator', 'user_review_narrator', 'user_id', 'narrator_id');
+    }
+    /**
+     * Get the transactions for the user.
+     */
+    public function transactions()
+    {
+        return $this->hasMany('App\Transaction');
     }
 }

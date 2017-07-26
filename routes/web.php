@@ -20,7 +20,7 @@ Route::get('register', 'UserController@register');
 Route::get('login', 'UserController@login');
 Route::get('logout', ['middleware' => 'api', 'uses' => 'UserController@logout']);
 Route::get('buy/{id}', ['middleware' => 'api', 'uses' => 'UserController@buySubscription']);
-Route::post('buyVerify', ['middleware' => 'api', 'uses' => 'UserController@buySubscriptionVerify']);
+Route::post('subscription/verify', ['middleware' => 'api', 'uses' => 'UserController@buySubscriptionVerify']);
 Route::get('getBook/{id}', ['middleware' => 'api', 'uses' => 'UserController@getBook']);
 /* End Users */
 

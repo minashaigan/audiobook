@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserHasSubscriptionTable extends Migration
+class CreateTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateUserHasSubscriptionTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_has_subscription', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->integer('subscription_id')->unsigned();
-            $table->integer('paid')->default(0);
-            $table->dateTime('expiration_date')->nullable();
+            $table->integer('amount')->unsigned();
+            $table->integer('transid')->nullable()->unique();
+            $table->boolean('condition')->default(0);
+            $table->string('type')->default('credit');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateUserHasSubscriptionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_has_subscription');
+        Schema::dropIfExists('transactions');
     }
 }

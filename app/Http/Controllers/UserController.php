@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Discount;
 use App\Subscription;
+use App\Transaction;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -139,7 +140,8 @@ class UserController extends Controller
      */
     public function buySubscription(Request $request,$id)
     {
-        $response = ['data'=>[],'result' => '0','description'=>'','message'=>''];
+        $response = ['data'=>[],'result' => '1','description'=>'','message'=>'success'];
+        
         $user = User::where('api_token',Input::get('api_token'))->first();
         $subscription = Subscription::query()->findOrFail($id);
         $price = $subscription->price;
@@ -151,16 +153,13 @@ class UserController extends Controller
                     $discount->count -= 1;
                     try{
                         $discount->save();
-                        $Code = $request->input('code');
-                        $response['result']=1;
-                        $response['description']=' it will buy with discount ';
-                        $response['message']='success';
                     }
                     catch ( \Illuminate\Database\QueryException $e){
-                        $response['result']=0;
-                        $response['description']='can not save discount after changing its count so it will buy with all price';
-                        $response['message']='failed';
+                        $response['description'] = "after finding the discount couldn't change his count and save it";
+                        $response['message'] = 'failed discount';
+                        return response()->json($response);
                     }
+                    $Code = $request->input('code');
                     if ($discount->type == 0) {
                         $price = $subscription->price * (100-$discount->value) / 100;
                     } else {
@@ -168,43 +167,32 @@ class UserController extends Controller
                     }
                 }
                 else{
-                    $response['result']=0;
-                    $response['description']='there is no more code to use so it will buy with all price';
-                    $response['message']='failed';
+                    $Code = '0';
                 }
             }
             else{
-                $response['result']=0;
-                $response['description']='wrong code inserted so it will buy with all price';
-                $response['message']='failed';
+                $Code = '0';
             }
-        }
-        else{
-            $response['result']=1;
-            $response['description']=' it will buy with all price ';
-            $response['message']='success';
         }
         $amount = $price*10000;
         $api = 'ad19e8fe996faac2f3cf7242b08972b6';
-        $redirect = 'http://vestacamp.vestaak.com/course/verify';
+        $redirect = 'http://vestacamp.vestaak.com/subscription/verify';
         $result = $this->send($api,$amount,$redirect);
         $result = json_decode($result);
         if($result->status) {
-            $trans=new Transactions();
+            $trans = new Transaction();
             $trans->user_id=$user->id;
             $trans->transid=$result->transId;
             $trans->amount=$amount;
-//            $trans->type = 'subscription.' . $subscription->id . $Code;
-            $trans->type = $subscription->id ;
-
+            $trans->type = 'subscription.' . $subscription->id . $Code;
             try{
                 $trans->save();
             }
             catch ( \Illuminate\Database\QueryException $e){
-                return 0;
+                $response['description'] = "couldn't save new transaction";
+                $response['message'] = 'failed transaction';
             }
             $go = "https://pay.ir/payment/gateway/$result->transId";
-            $user->subscriptions()->attach($subscription->id, ['paid' => 0]);
             return redirect($go);
         } else {
             $message="مشکلی در اتصال به درگاه پرداخت به وجود آمده است لطفا کمی بعد تلاش کنید.";
@@ -216,25 +204,66 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function buySubscriptionVerify(Request $request)
+    public function buySubscriptionVerify()
     {
         $user = User::where('api_token',Input::get('api_token'))->first();
-        $response = ['data'=>[],'result' => '0','description'=>'','message'=>''];
         $api = 'ad19e8fe996faac2f3cf7242b08972b6';
-        $transId = $request->input('transId');
+        $transId = $_POST['transId'];
         $result = $this->verify($api,$transId);
         $result = json_decode($result);
-        $trans=Transactions::where('transid',$transId)->first();
+        $trans=Transaction::where('transid',$transId)->first();
         if(is_null($trans) || $trans->user_id!=$user->id || $result->status!=1 || $result->amount!=$trans->amount){
-            $response['message']="مشکلی در تراکنش شما به وجود آمده است، لطفا کمی بعد تلاش کنید.";
-            return response()->json($response);
+            $message="مشکلی در تراکنش شما به وجود آمده است، لطفا کمی بعد تلاش کنید.";
+            return view('pay-error.pay-error')->with(['message'=>$message]);
         }
-        else{
-            $user->subscriptions()->save($trans->type, ['paid' => 1]);
-            $response['result']=1;
-            $response['message']="subscription take successfully";
-            return response()->json($response);
+        $trans=Transaction::query()->findorfail($trans->id);
+        $trans->save();
+        $pieces = explode(".", $trans->type);
+        $subscription=Subscription::query()->findorfail(intval($pieces[1]));
+        $cardnumber = $_POST['cardNumber'];
+        $trans->type=$trans->type.'='.$cardnumber;
+        $subscriptions = $user->subscriptions()->get();
+        $mostRecent = 0;
+        foreach ($subscriptions as $subscription){
+            if ($subscription->pivot->expiration_date > $mostRecent) {
+                $mostRecent = $subscription->pivot->expiration_date;
+            }
         }
+        $date = $mostRecent;
+        $date = strtotime($date);
+        try{
+            if($subscription->type == 0) {
+                $date = strtotime("+1 day", $date);
+                $user->subscriptions()->attach($subscription->id, ['paid' => $trans->amount, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+            }
+            if($subscription->type == 1) {
+                $date = strtotime("+7 day", $date);
+                $user->subscriptions()->attach($subscription->id, ['paid' => $trans->amount, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+            }
+            if($subscription->type == 2) {
+                $date = strtotime("+31 day", $date);
+                $user->subscriptions()->attach($subscription->id, ['paid' => $trans->amount, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+            }
+            if($subscription->type == 3) {
+                $date = strtotime("+365 day", $date);
+                $user->subscriptions()->attach($subscription->id, ['paid' => $trans->amount, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+            }
+        }
+        catch ( \Illuminate\Database\QueryException $e){
+            $response['error']=$e;
+            $message="تراکنش با موفقیت انجام شد، ولی مشکلی به وجود آمده است ، با بخش پشتیبانی تماس بگیرید. | "." کد پیگیری تراکنش :$transId ";
+            return view('pay-error.pay-error')->with(['message'=>$message]);
+        }
+
+        try{
+            $trans->save();
+        }
+        catch ( \Illuminate\Database\QueryException $e){
+            $message="مشکلی در تراکنش شما به وجود آمده است، لطفا کمی بعد تلاش کنید.";
+            return view('pay-error.pay-error')->with(['message'=>$message]);
+        }
+
+        return  response()->json(['transId'=>$transId,'subscription'=>$subscription,'price'=>$trans->amount/10000]);
     }
     /**
      * @param $api
@@ -261,7 +290,6 @@ class UserController extends Controller
      */
     public function verify($api, $transId)
     {
-        //verify
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://pay.ir/payment/verify');
         curl_setopt($ch, CURLOPT_POSTFIELDS, "api=$api&transId=$transId");
@@ -270,21 +298,35 @@ class UserController extends Controller
         $res = curl_exec($ch);
         curl_close($ch);
         return $res;
-        //verify
     }
 
     public function getBook(Request $request,$id)
     {
         $user = User::where('api_token',$request->input('api_token'))->first();
-        $subscriptions = $user->subscriptions()->where('paid',1)->get();
+        $subscriptions = $user->subscriptions()->where('paid','<>',0)->get();
         if(count($subscriptions)){
+            $mostRecent = 0;
             foreach ($subscriptions as $subscription){
-                echo $subscription->pivot->created_at,"\n";
+                if ($subscription->pivot->expiration_date > $mostRecent) {
+                    $mostRecent = $subscription->pivot->expiration_date;
+                }
             }
-            return date("Y-m-d h:m:s");
+            $now = date('Y-m-d H:i:s');
+            if($mostRecent>$now){
+                $book = $user->books()->wherePivot('book_id',$id)->first();
+                if($book){
+                    return response()->json(['data'=>[],'result'=>0,'description'=>'user already got this book','message'=>'failed']);
+                }
+                else{
+                    $user->books()->attach($id);
+                    $books = $user->books()->get();
+                    return response()->json(['data'=>['books'=>$books],'result'=>0,'description'=>'user already got this book','message'=>'failed']);
+                }
+            }
+            return response()->json(['data'=>['d'=>$now],'result'=>1,'description'=>'user has no subscription to get a book','message'=>'failed by no subscription']);
         }
         else{
-            return response()->json(['data'=>[],'result'=>1,'description'=>'user has no subscription to get a book','message'=>'failed by no subscription']);
+            return response()->json(['data'=>['d'=>$subscriptions],'result'=>1,'description'=>'user has no subscription to get a book or his subscriptions expired','message'=>'failed by no subscription']);
         }
     }
 }
