@@ -52,3 +52,7 @@ Route::resource('subscriptions', 'SubscriptionController',['except' => ['update'
 /* End Subscription */
 
 });
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});

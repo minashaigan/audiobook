@@ -240,50 +240,29 @@ class UserController extends Controller
         $trans->save();
         $pieces = explode(".", $trans->type);
         $subscription=Subscription::query()->findOrFail(intval($pieces[1]));
+        $Code=$pieces[2];
         $cardnumber = $_POST['cardNumber'];
         $trans->type=$trans->type.'='.$cardnumber;
-        $subscriptions = $user->subscriptions()->get();
-        $mostRecent = 0;
-        foreach ($subscriptions as $subscription){
-            if ($subscription->pivot->expiration_date > $mostRecent) {
-                $mostRecent = $subscription->pivot->expiration_date;
-            }
+        if ($Code=='0'){
+            $Code=0;
         }
-        $date = $mostRecent;
-        $date = strtotime($date);
-        try{
-            if($subscription->type == 0) {
-                $date = strtotime("+1 day", $date);
-                $user->subscriptions()->attach($subscription->id, ['paid' => $trans->amount, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+        $res=$this->takeSubscription($subscription,$user,$Code);
+        if(! $res['error']){
+            $trans->condition=1;
+            try{
+                $trans->save();
             }
-            if($subscription->type == 1) {
-                $date = strtotime("+7 day", $date);
-                $user->subscriptions()->attach($subscription->id, ['paid' => $trans->amount, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+            catch ( \Illuminate\Database\QueryException $e){
+                $message="مشکلی در تراکنش شما به وجود آمده است، لطفا کمی بعد تلاش کنید.";
+                return view('pay-error.pay-error')->with(['message'=>$message]);
             }
-            if($subscription->type == 2) {
-                $date = strtotime("+31 day", $date);
-                $user->subscriptions()->attach($subscription->id, ['paid' => $trans->amount, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
-            }
-            if($subscription->type == 3) {
-                $date = strtotime("+365 day", $date);
-                $user->subscriptions()->attach($subscription->id, ['paid' => $trans->amount, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
-            }
+            return  response()->json(['transId'=>$transId,'subscription'=>$subscription,'price'=>$trans->amount/10000]);
         }
-        catch ( \Illuminate\Database\QueryException $e){
-            $response['error']=$e;
+        else{
             $message="تراکنش با موفقیت انجام شد، ولی مشکلی به وجود آمده است ، با بخش پشتیبانی تماس بگیرید. | "." کد پیگیری تراکنش :$transId ";
             return view('pay-error.pay-error')->with(['message'=>$message]);
         }
-
-        try{
-            $trans->save();
-        }
-        catch ( \Illuminate\Database\QueryException $e){
-            $message="مشکلی در تراکنش شما به وجود آمده است، لطفا کمی بعد تلاش کنید.";
-            return view('pay-error.pay-error')->with(['message'=>$message]);
-        }
-
-        return  response()->json(['transId'=>$transId,'subscription'=>$subscription,'price'=>$trans->amount/10000]);
+        
     }
     /**
      * send
@@ -324,6 +303,131 @@ class UserController extends Controller
         return $res;
     }
 
+    /**
+     * takeSubscription
+     * 
+     * @param $subscription
+     * @param $user
+     * @param $code
+     * @return $this|array
+     */
+    public function takeSubscription($subscription,$user,$code)
+    {
+        $response=[];
+        $price = $subscription->price;
+        if($code) {
+            $discount = Discount::where(['code'=>$code,'subscription_id'=>$subscription->id])->first();
+            if (is_null($discount)) {
+                $response['error'] = 'not such a code in valid';
+                $response['price'] = $price;
+                return $response;
+            }
+            else
+            {
+                if(!is_null($discount)) {
+                    if ($discount->count <= 0 or $discount->disable == 1|| $discount->subscription_id!=$subscription->id) {
+                        $response['error'] = 'not available as it is expired';
+                        $response['price'] = $price;
+                        return $response;
+                    }
+                    else
+                    {
+                        $discount->count -= 1;
+                        try{
+                            $discount->save();
+                        }
+                        catch ( \Illuminate\Database\QueryException $e){
+                            $response['error']= 'can not save discount';
+                            return $response;
+                        }
+                        $response['error'] = 'there is no error';
+                        if ($discount->type == 0) {
+                            $newprice = $price * (100-$discount->value) / 100;
+                        } else {
+                            $newprice = $price - $discount->value;
+                        }
+                        $response['price'] = $newprice;
+
+                        $subscriptions = $user->subscriptions()->get();
+                        $mostRecent = 0;
+                        foreach ($subscriptions as $subscription){
+                            if ($subscription->pivot->expiration_date > $mostRecent) {
+                                $mostRecent = $subscription->pivot->expiration_date;
+                            }
+                        }
+                        $date = $mostRecent;
+                        $date = strtotime($date);
+                        try{
+                            if($subscription->type == 0) {
+                                $date = strtotime("+1 day", $date);
+                                $user->subscriptions()->attach($subscription->id, ['paid' => $price, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+                            }
+                            if($subscription->type == 1) {
+                                $date = strtotime("+7 day", $date);
+                                $user->subscriptions()->attach($subscription->id, ['paid' => $price, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+                            }
+                            if($subscription->type == 2) {
+                                $date = strtotime("+31 day", $date);
+                                $user->subscriptions()->attach($subscription->id, ['paid' => $price, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+                            }
+                            if($subscription->type == 3) {
+                                $date = strtotime("+365 day", $date);
+                                $user->subscriptions()->attach($subscription->id, ['paid' => $price, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+                            }
+                        }
+                        catch ( \Illuminate\Database\QueryException $e){
+                            $response['error']=$e;
+                            $response['price']=$price;
+                            return $response;
+                        }
+                        return $response;
+                    }
+                }
+                else{
+                    $response['error']=1;
+                    $response['price']=$price;
+                    return $response;
+                }
+            }
+        }
+        else{
+            $subscriptions = $user->subscriptions()->get();
+            $mostRecent = 0;
+            foreach ($subscriptions as $subscription){
+                if ($subscription->pivot->expiration_date > $mostRecent) {
+                    $mostRecent = $subscription->pivot->expiration_date;
+                }
+            }
+            $date = $mostRecent;
+            $date = strtotime($date);
+            try{
+                if($subscription->type == 0) {
+                    $date = strtotime("+1 day", $date);
+                    $user->subscriptions()->attach($subscription->id, ['paid' => $price, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+                }
+                if($subscription->type == 1) {
+                    $date = strtotime("+7 day", $date);
+                    $user->subscriptions()->attach($subscription->id, ['paid' => $price, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+                }
+                if($subscription->type == 2) {
+                    $date = strtotime("+31 day", $date);
+                    $user->subscriptions()->attach($subscription->id, ['paid' => $price, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+                }
+                if($subscription->type == 3) {
+                    $date = strtotime("+365 day", $date);
+                    $user->subscriptions()->attach($subscription->id, ['paid' => $price, 'expiration_date' => date('Y-m-d H:i:s', $date)]);
+                }
+            }
+            catch ( \Illuminate\Database\QueryException $e){
+                $response['error']=$e;
+                $message="تراکنش با موفقیت انجام شد، ولی مشکلی به وجود آمده است ، با بخش پشتیبانی تماس بگیرید. | "." کد پیگیری تراکنش :$transId ";
+                return view('pay-error.pay-error')->with(['message'=>$message]);
+            }
+            $response['error']=0;
+            $response['price']=$price;
+            return $response;
+        }
+    }
     /**
      * get specified book by subscription the user bought
      * 
