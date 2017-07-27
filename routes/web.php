@@ -19,9 +19,11 @@ Route::get('/', function () {
 Route::get('register', 'UserController@register');
 Route::get('login', 'UserController@login');
 Route::get('logout', ['middleware' => 'api', 'uses' => 'UserController@logout']);
-Route::get('buy/{id}', ['middleware' => 'api', 'uses' => 'UserController@buySubscription']);
-Route::post('subscription/verify', ['middleware' => 'api', 'uses' => 'UserController@buySubscriptionVerify']);
-Route::get('getBook/{id}', ['middleware' => 'api', 'uses' => 'UserController@getBook']);
+Route::get('subscriptions/buy/{id}', ['middleware' => 'api', 'uses' => 'UserController@buySubscription']);
+Route::post('subscriptions/verify', ['middleware' => 'api', 'uses' => 'UserController@buySubscriptionVerify']);
+Route::get('books/get/{id}', ['middleware' => 'api', 'uses' => 'UserController@getBook']);
+Route::get('books/wish/{id}', ['middleware' => 'api', 'uses' => 'UserController@getWishBook']);
+Route::get('genres/get/{id}', ['middleware' => 'api', 'uses' => 'UserController@getGenre']);
 /* End Users */
 
 /* Books */
@@ -40,6 +42,6 @@ Route::get('searchNarrator', 'NarratorController@search');
 /* End Narrators */
 
 /* Subscription */
-Route::resource('subscriptions','SubscriptionController',['except' => ['update','edit','create','destroy','store']]);
+Route::resource('subscriptions', 'SubscriptionController',['except' => ['update', 'edit', 'create', 'destroy', 'store']]);
 
 /* End Subscription */

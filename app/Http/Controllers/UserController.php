@@ -8,7 +8,6 @@ use App\Transaction;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
@@ -92,7 +91,7 @@ class UserController extends Controller
                     return response()->json($response);
                 }
                 $api_code=str_random(60);
-                $user=User::find($user->id);
+                $user=User::query()->find($user->id);
                 $user->api_token=$api_code;
                 try{
                     $user->save();
@@ -136,7 +135,7 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|int
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function buySubscription(Request $request,$id)
     {
@@ -176,7 +175,7 @@ class UserController extends Controller
         }
         $amount = $price*10000;
         $api = 'ad19e8fe996faac2f3cf7242b08972b6';
-        $redirect = 'http://vestacamp.vestaak.com/subscription/verify';
+        $redirect = 'http://vestacamp.vestaak.com/subscriptions/verify';
         $result = $this->send($api,$amount,$redirect);
         $result = json_decode($result);
         if($result->status) {
@@ -204,6 +203,9 @@ class UserController extends Controller
         return response()->json($response);
     }
 
+    /**
+     * @return $this|\Illuminate\Http\JsonResponse
+     */
     public function buySubscriptionVerify()
     {
         $user = User::where('api_token',Input::get('api_token'))->first();
@@ -216,10 +218,10 @@ class UserController extends Controller
             $message="مشکلی در تراکنش شما به وجود آمده است، لطفا کمی بعد تلاش کنید.";
             return view('pay-error.pay-error')->with(['message'=>$message]);
         }
-        $trans=Transaction::query()->findorfail($trans->id);
+        $trans=Transaction::query()->findOrFail($trans->id);
         $trans->save();
         $pieces = explode(".", $trans->type);
-        $subscription=Subscription::query()->findorfail(intval($pieces[1]));
+        $subscription=Subscription::query()->findOrFail(intval($pieces[1]));
         $cardnumber = $_POST['cardNumber'];
         $trans->type=$trans->type.'='.$cardnumber;
         $subscriptions = $user->subscriptions()->get();
@@ -300,33 +302,98 @@ class UserController extends Controller
         return $res;
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getBook(Request $request,$id)
     {
         $user = User::where('api_token',$request->input('api_token'))->first();
-        $subscriptions = $user->subscriptions()->where('paid','<>',0)->get();
-        if(count($subscriptions)){
-            $mostRecent = 0;
-            foreach ($subscriptions as $subscription){
-                if ($subscription->pivot->expiration_date > $mostRecent) {
-                    $mostRecent = $subscription->pivot->expiration_date;
+        if($user) {
+            $subscriptions = $user->subscriptions()->where('paid', '<>', 0)->get();
+            if (count($subscriptions)) {
+                $mostRecent = 0;
+                foreach ($subscriptions as $subscription) {
+                    if ($subscription->pivot->expiration_date > $mostRecent) {
+                        $mostRecent = $subscription->pivot->expiration_date;
+                    }
                 }
+                $now = date('Y-m-d H:i:s');
+                if ($mostRecent > $now) {
+                    $book = $user->books()->wherePivot('book_id', $id)->first();
+                    if ($book) {
+                        return response()->json(['data' => [], 'result' => 0, 'description' => 'user already got this book', 'message' => 'failed']);
+                    } else {
+                        try{
+                            $user->books()->attach($id);
+                        }
+                        catch ( \Illuminate\Database\QueryException $e){
+                            return response()->json(['data'=>['error'=>$e],'result'=>0,'description'=>'cannot save book','message'=>'failed']);
+                        }
+                        $books = $user->books()->get();
+                        return response()->json(['data' => ['books' => $books], 'result' => 1, 'description' => 'user got this book successfully', 'message' => 'successfully']);
+                    }
+                } else {
+                    return response()->json(['data' => ['today_date' => $now], 'result' => 0, 'description' => 'all user subscriptions expired', 'message' => 'failed by no subscription']);
+                }
+            } else {
+                return response()->json(['data' => ['subscriptions' => $subscriptions], 'result' => 0, 'description' => 'user has no subscription to get a book ', 'message' => 'failed by no subscription']);
             }
-            $now = date('Y-m-d H:i:s');
-            if($mostRecent>$now){
-                $book = $user->books()->wherePivot('book_id',$id)->first();
-                if($book){
-                    return response()->json(['data'=>[],'result'=>0,'description'=>'user already got this book','message'=>'failed']);
-                }
-                else{
-                    $user->books()->attach($id);
-                    $books = $user->books()->get();
-                    return response()->json(['data'=>['books'=>$books],'result'=>0,'description'=>'user already got this book','message'=>'failed']);
-                }
+        }else{
+            return response()->json(['data' => [], 'result' => 0, 'description' => 'wrong api_token ', 'message' => 'failed']);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getWishBook(Request $request,$id)
+    {
+        $user = User::where('api_token',$request->input('api_token'))->first();
+        if($user){
+            $wish = $user->wishlist()->wherePivot('book_id',$id)->first();
+            if($wish){
+                return response()->json(['data'=>[],'result'=>0,'description'=>'user already wish this book','message'=>'failed']);
             }
-            return response()->json(['data'=>['d'=>$now],'result'=>1,'description'=>'user has no subscription to get a book','message'=>'failed by no subscription']);
+            else{
+                try{
+                    $user->wishlist()->attach($id);
+                }
+                catch ( \Illuminate\Database\QueryException $e){
+                    return response()->json(['data'=>['error'=>$e],'result'=>0,'description'=>'cannot wish book ','message'=>'failed']);
+                }
+                $wishes = $user->wishlist()->get();
+                return response()->json(['data'=>['books'=>$wishes],'result'=>1,'description'=>'user got wish book successfully','message'=>'success']);
+            }
+        }else{
+            return response()->json(['data' => [], 'result' => 0, 'description' => 'wrong api_token ', 'message' => 'failed']);
+        }
+    }
+
+    public function getGenre(Request $request,$id)
+    {
+        $user = User::where('api_token',$request->input('api_token'))->first();
+        if($user){
+            $genre = $user->genres()->wherePivot('genre_id',$id)->first();
+            if($genre){
+                return response()->json(['data'=>[],'result'=>0,'description'=>'user already get this genre','message'=>'failed']);
+            }
+            else{
+                try{
+                    $user->genres()->attach($id);
+                }
+                catch ( \Illuminate\Database\QueryException $e){
+                    return response()->json(['data'=>['error'=>$e],'result'=>0,'description'=>'cannot save genre','message'=>'failed']);
+                }
+                $genres = $user->genres()->get();
+                return response()->json(['data'=>['genres'=>$genres],'result'=>1,'description'=>'user got genre succesfully','message'=>'success']);
+            }
         }
         else{
-            return response()->json(['data'=>['d'=>$subscriptions],'result'=>1,'description'=>'user has no subscription to get a book or his subscriptions expired','message'=>'failed by no subscription']);
+            return response()->json(['data' => [], 'result' => 0, 'description' => 'wrong api_token ', 'message' => 'failed']);
         }
     }
 }

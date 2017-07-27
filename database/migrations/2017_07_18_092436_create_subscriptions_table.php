@@ -18,7 +18,7 @@ class CreateSubscriptionsTable extends Migration
             $table->increments('id');
             $table->string('name')->nullable();
             $table->string('subscription')->nullable();
-            $table->integer('type');
+            $table->integer('type')->default(0);
             $table->double('price', 15, 2)->default(0.0);
 
             $table->timestamps();

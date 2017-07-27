@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\User;
 use Closure;
+use Illuminate\Http\Request;
 
 class ApiMiddleware
 {
@@ -13,10 +15,10 @@ class ApiMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        if(isset($request['api_token'])){
-            $user=User::where('api_token',$request['api_token'])->first();
+        if($request->input('api_token')){
+            $user=User::where('api_token',$request->input('api_token'))->first();
             if (! is_null($user)){
                 return $next($request);
             }
