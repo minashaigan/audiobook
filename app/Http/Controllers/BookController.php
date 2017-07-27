@@ -9,10 +9,22 @@ use App\Tag;
 use App\Genre;
 use Illuminate\Http\Request;
 
+/**
+ * 
+ * @resource Book
+ * 
+ * all functions about books :
+ *      to show all books , top books with their information
+ *      to show specified book and related information
+ *
+ * Class BookController
+ * @package App\Http\Controllers
+ */
+
 class BookController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the books.
      *
      * @return \Illuminate\Http\Response
      */
@@ -66,7 +78,7 @@ class BookController extends Controller
         return response()->json(['data'=>['books'=>$books,'top_books'=>$top], 'result' => 1, 'description' => 'list of books', 'message' => 'success']);
     }
     /**
-     * Display the specified resource.
+     * Display the specified book.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -128,6 +140,8 @@ class BookController extends Controller
         return response()->json(['data'=>['book'=>$book], 'result' => 1, 'description' => 'a book', 'message' => 'success']);
     }
     /**
+     * Search the specified book with its related authors, narrators, genres, tags, name
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */

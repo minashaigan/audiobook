@@ -10,9 +10,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 
+/**
+ * @resource User
+ * 
+ * all related operations to specified user
+ * 
+ * Class UserController
+ * @package App\Http\Controllers
+ */
 class UserController extends Controller
 {
     /**
+     * register specified user
+     * 
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -59,6 +69,8 @@ class UserController extends Controller
     }
 
     /**
+     * login specified user
+     * 
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -115,6 +127,8 @@ class UserController extends Controller
 
     }
     /**
+     * logout specified user
+     * 
      * @return \Illuminate\Http\JsonResponse
      */
     public function logout()
@@ -133,6 +147,8 @@ class UserController extends Controller
     }
 
     /**
+     * buy specified subscription
+     * 
      * @param Request $request
      * @param $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -204,6 +220,8 @@ class UserController extends Controller
     }
 
     /**
+     * verify bought subscription 
+     * 
      * @return $this|\Illuminate\Http\JsonResponse
      */
     public function buySubscriptionVerify()
@@ -268,6 +286,8 @@ class UserController extends Controller
         return  response()->json(['transId'=>$transId,'subscription'=>$subscription,'price'=>$trans->amount/10000]);
     }
     /**
+     * send
+     * 
      * @param $api
      * @param $amount
      * @param $redirect
@@ -286,6 +306,8 @@ class UserController extends Controller
     }
 
     /**
+     * verify
+     * 
      * @param $api
      * @param $transId
      * @return mixed
@@ -303,6 +325,8 @@ class UserController extends Controller
     }
 
     /**
+     * get specified book by subscription the user bought
+     * 
      * @param Request $request
      * @param $id
      * @return \Illuminate\Http\JsonResponse
@@ -346,6 +370,8 @@ class UserController extends Controller
     }
 
     /**
+     * add new wish book
+     * 
      * @param Request $request
      * @param $id
      * @return \Illuminate\Http\JsonResponse
@@ -373,6 +399,13 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * add new genre for user
+     * 
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getGenre(Request $request,$id)
     {
         $user = User::where('api_token',$request->input('api_token'))->first();
@@ -396,4 +429,90 @@ class UserController extends Controller
             return response()->json(['data' => [], 'result' => 0, 'description' => 'wrong api_token ', 'message' => 'failed']);
         }
     }
+    /**
+     * change password
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function ChangePass()
+    {
+        $user = User::where('api_token',Input::get('api_token'))->first();
+        if($user) {
+            $input = Input::all();
+            if (!Input::has('oldpass') || !Input::has('newpass')) {
+                return response()->json(['data' => [], 'result' => 0, 'description' => 'there is no information', 'message' => 'failed']);
+            }
+
+            if (!password_verify(Input::get('oldpass'), $user->password))
+                return response()->json(['data' => [], 'result' => 0, 'description' => 'there is mismatch in password', 'message' => 'failed']);
+            $rules = array(
+                'newpass' => 'required|min:6',
+            );
+            $messages = [
+                'newpass.required' => 'رمز عبور ضروری میباشد ',
+                'newpass.min' => 'حداقل طول پسورد ۶ است ',
+            ];
+            $validator = Validator::make($input, $rules, $messages);
+            if ($validator->fails()) {
+                return response()->json(['data' => ['errors' => $validator->errors()], 'result' => 0, 'dscription' => 'validator failed', 'message' => 'failed']);
+            }
+            $user->password = bcrypt(Input::get('newpass'));
+            try {
+                $user->save();
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['data' => ['errors' => $e], 'result' => 0, 'dscription' => 'cannot save the user', 'message' => 'failed']);
+            }
+            $user = User::where('api_token', Input::get('api_token'))->first();
+            return response()->json(['data' => ['user' => $user], 'result' => 1, 'dscription' => 'password change successfully', 'message' => 'success']);
+        }
+        else{
+            return response()->json(['data' => [], 'result' => 0, 'description' => 'wrong api_token ', 'message' => 'failed']);
+        }
+    }
+
+    /**
+     * upload photo
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function UploadPhoto()
+    {
+        $user = User::where('api_token',Input::get('api_token'))->first();
+        if($user) {
+            if (Input::hasFile('image')) {
+                $file = array('image' => Input::file('image'));
+                $rules = array('image' => 'max:100000|mimes:jpeg,JPEG,PNG,png');
+                $messages = [
+                    'image.max' => 'حجم فایل بسیار زیاد است ',
+                    'image.mimes' => 'فرمت فایل شما ساپورت نمیشود.',
+                ];
+                $validator = Validator::make($file, $rules, $messages);
+                if ($validator->fails()) {
+                    return response()->json(['data' => ['errors' => $validator->errors()], 'result' => 0, 'dscription' => 'validator failed', 'message' => 'failed']);
+                }
+                if (Input::file('image')->isValid()) {
+                    $destinationPath = 'uploads/' . $user->id; // upload path
+                    $extension = Input::file('image')->getClientOriginalExtension(); // getting image extension
+                    $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
+                    Input::file('image')->move($destinationPath, $fileName); // uploading file to given path
+                    $user->image = $destinationPath . '/' . $fileName;
+                    try {
+                        $user->save();
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        return response()->json(['data' => ['errors' => $e], 'result' => 0, 'dscription' => 'cannot save the user', 'message' => 'failed']);
+                    }
+                    $user = User::where('api_token',Input::get('api_token'))->first();
+                    return response()->json(['data' => ['user' => $user], 'result' => 1, 'dscription' => 'the user successfully save', 'message' => 'success']);
+                } else {
+                    return response()->json(['data' => [], 'result' => 0, 'description' => 'the image is not valid ', 'message' => 'failed']);
+                }
+            } else
+                return response()->json(['data' => 0, 'result' => 0, 'description' => 'no image file ', 'message' => 'failed']);
+        }
+        else{
+            return response()->json(['data' => [], 'result' => 0, 'description' => 'wrong api_token ', 'message' => 'failed']);
+        }
+    }
+    
+
 }

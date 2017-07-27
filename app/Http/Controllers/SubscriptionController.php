@@ -5,10 +5,20 @@ namespace App\Http\Controllers;
 use App\Subscription;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * @resource Subscription
+ * 
+ *  all functions about subscriptions :
+ *      to show all subscriptions , top subscription by number users use that subscription with their information
+ *      to show specified subscription and related information
+ * 
+ * Class SubscriptionController
+ * @package App\Http\Controllers
+ */
 class SubscriptionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the subscriptions.
      *
      * @return \Illuminate\Http\Response
      */
@@ -23,7 +33,7 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified subscription.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

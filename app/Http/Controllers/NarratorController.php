@@ -8,10 +8,20 @@ use App\Book;
 use App\Genre;
 use Illuminate\Http\Request;
 
+/**
+ * @resource Narrator
+ * 
+ *  all functions about narrators :
+ *      to show all narrators , top narrators with their information
+ *      to show specified narrator and related information
+ * 
+ * Class NarratorController
+ * @package App\Http\Controllers
+ */
 class NarratorController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the narrators.
      * 
      * @return \Illuminate\Http\JsonResponse
      */
@@ -48,7 +58,7 @@ class NarratorController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified narrator.
      * 
      * @param $id
      * @return \Illuminate\Http\JsonResponse
@@ -134,6 +144,8 @@ class NarratorController extends Controller
     }
 
     /**
+     * Search the specified narrator with his related genres, books, tags, name.
+     * 
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */

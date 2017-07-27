@@ -8,10 +8,17 @@ use App\Genre;
 use App\Tag;
 use Illuminate\Http\Request;
 
+/**
+ * @resource Author
+ *
+ *  all functions about authors :
+ *      to show all authors , top authors with their information
+ *      to show specified author and related information
+ */
 class AuthorController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the authors.
      * 
      * @return \Illuminate\Http\JsonResponse
      */
@@ -48,7 +55,7 @@ class AuthorController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified author.
      * 
      * @param $id
      * @return \Illuminate\Http\JsonResponse
@@ -134,6 +141,8 @@ class AuthorController extends Controller
     }
 
     /**
+     * Search the specified author with his related tags, genres, books, name 
+     * 
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
