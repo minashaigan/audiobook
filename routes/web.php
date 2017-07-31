@@ -14,7 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::group(array('prefix' => 'api/v1', 'middleware' => []), function () {
+Route::group(array('prefix' => 'api/', 'middleware' => []), function () {
     
 /* Users */
 Route::get('register', 'UserController@register');
@@ -27,8 +27,12 @@ Route::post('subscriptions/verify', ['middleware' => 'api', 'uses' => 'UserContr
 Route::get('books/get/{id}', ['middleware' => 'api', 'uses' => 'UserController@getBook']);
 Route::get('books/wish/{id}', ['middleware' => 'api', 'uses' => 'UserController@getWishBook']);
 Route::get('genres/get/{id}', ['middleware' => 'api', 'uses' => 'UserController@getGenre']);
-Route::get('password/change', ['middleware' => 'api', 'uses' => 'UserController@ChangePass']);
-Route::get('image/upload', ['middleware' => 'api', 'uses' => 'UserController@UploadPhoto']);
+Route::get('password/change', ['middleware' => 'api', 'uses' => 'UserController@changePass']);
+Route::get('image/upload', ['middleware' => 'api', 'uses' => 'UserController@uploadPhoto']);
+// review
+Route::get('books/review/{id}', ['middleware' => 'api', 'uses' => 'UserController@reviewBook']);
+Route::get('authors/review/{id}', ['middleware' => 'api', 'uses' => 'UserController@reviewAuthor']);
+Route::get('narrators/review/{id}', ['middleware' => 'api', 'uses' => 'UserController@reviewNarrator']);
 /* End Users */
     
 /* Books */
@@ -56,3 +60,4 @@ Route::resource('subscriptions', 'SubscriptionController',['except' => ['update'
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
+    

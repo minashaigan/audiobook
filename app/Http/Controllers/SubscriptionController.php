@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Config;
 class SubscriptionController extends Controller
 {
     /**
+     * Subscription List
+     *
      * Display a listing of the subscriptions.
      *
      * @return \Illuminate\Http\Response
@@ -33,6 +35,8 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * Subscription
+     *
      * Display the specified subscription.
      *
      * @param  int  $id
@@ -40,9 +44,15 @@ class SubscriptionController extends Controller
      */
     public function show($id)
     {
-        $subscription = Subscription::query()->findOrFail($id);
-        $subscription["type_name"] = value(Config::get('subscriptionstypes.type.'.$subscription->type));
-        $subscription["users_number"] = count($subscription->users()->get());
+        $subscription = Subscription::query()->find($id);
+        if($subscription) {
+            $subscription["type_name"] = value(Config::get('subscriptionstypes.type.' . $subscription->type));
+            $subscription["users_number"] = count($subscription->users()->get());
+            return response()->json(['data'=>['subscriptions'=>$subscription],'result'=>1,'description'=>'list of subscriptions with number of users that buy that subscription','message'=>'success']);
+        }
+        else{
+            return response()->json(['data' => [], 'result' => 0, 'description' => 'wrong subscription id ', 'message' => 'failed']);
+        }
     }
 
 }

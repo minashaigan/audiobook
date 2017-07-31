@@ -24,13 +24,15 @@ Welcome to the generated API reference.
  all functions about authors :
      to show all authors , top authors with their information
      to show specified author and related information
-<!-- START_4fb2c254627b68c503474f58f915ec4a -->
-## Display a listing of the authors.
+<!-- START_95699a9074268cd7aa7e621af899a9be -->
+## Author List
+
+Display a listing of the authors.
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/authors" \
+curl -X GET "http://localhost:8000/api/authors" \
 -H "Accept: application/json"
 ```
 
@@ -38,7 +40,7 @@ curl -X GET "http://localhost/api/v1/authors" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/authors",
+    "url": "http://localhost:8000/api/authors",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -59,77 +61,19 @@ $.ajax(settings).done(function (response) {
             {
                 "id": 1,
                 "name": "author1",
-                "introduction": null,
-                "birth_date": null,
-                "death_date": null,
-                "image": null,
-                "nation": null,
-                "created_at": null,
-                "updated_at": null,
-                "deleted_at": null,
-                "genres": "genre1,genre2,genre3",
-                "rate": 2.5
-            },
-            {
-                "id": 2,
-                "name": "author2",
-                "introduction": "intro1",
-                "birth_date": null,
-                "death_date": null,
-                "image": null,
-                "nation": null,
-                "created_at": null,
-                "updated_at": null,
-                "deleted_at": null,
-                "genres": "genre1,genre5",
-                "rate": 0
-            },
-            {
-                "id": 3,
-                "name": "author3",
-                "introduction": "intro2",
-                "birth_date": 1200,
-                "death_date": null,
-                "image": null,
-                "nation": null,
-                "created_at": null,
-                "updated_at": null,
+                "introduction": "i'm an author",
+                "birth_date": 1392,
+                "death_date": 1450,
+                "image": "authors\/July2017\/vSm5qpNBJ8vw5v7a6wGz.png",
+                "nation": "iranian",
+                "created_at": "2017-07-27 17:18:21",
+                "updated_at": "2017-07-27 17:18:21",
                 "deleted_at": null,
                 "genres": "",
                 "rate": 0
-            },
-            {
-                "id": 4,
-                "name": "author4",
-                "introduction": "intro3",
-                "birth_date": 1300,
-                "death_date": 1400,
-                "image": null,
-                "nation": null,
-                "created_at": null,
-                "updated_at": null,
-                "deleted_at": null,
-                "genres": "",
-                "rate": 0
-            },
-            {
-                "id": 5,
-                "name": "author5",
-                "introduction": "intro4",
-                "birth_date": 1400,
-                "death_date": 1500,
-                "image": null,
-                "nation": "nationality",
-                "created_at": null,
-                "updated_at": null,
-                "deleted_at": null,
-                "genres": "",
-                "rate": 5
             }
         ],
-        "top_authors": [
-            "author5"
-        ]
+        "top_authors": []
     },
     "result": 1,
     "description": "list of authors",
@@ -138,20 +82,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/authors`
+`GET api/authors`
 
-`HEAD api/v1/authors`
+`HEAD api/authors`
 
 
-<!-- END_4fb2c254627b68c503474f58f915ec4a -->
+<!-- END_95699a9074268cd7aa7e621af899a9be -->
 
-<!-- START_bb66c2842c782ae26d9782d21e5a15b2 -->
-## Display the specified author.
+<!-- START_31c161d4e2e8dd0cef72967cb4f6a4af -->
+## Author
+
+Display the specified author.
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/authors/{author}" \
+curl -X GET "http://localhost:8000/api/authors/{author}" \
 -H "Accept: application/json"
 ```
 
@@ -159,7 +105,7 @@ curl -X GET "http://localhost/api/v1/authors/{author}" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/authors/{author}",
+    "url": "http://localhost:8000/api/authors/{author}",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -179,115 +125,19 @@ $.ajax(settings).done(function (response) {
         "author": {
             "id": 1,
             "name": "author1",
-            "introduction": null,
-            "birth_date": null,
-            "death_date": null,
-            "image": null,
-            "nation": null,
-            "created_at": null,
-            "updated_at": null,
+            "introduction": "i'm an author",
+            "birth_date": 1392,
+            "death_date": 1450,
+            "image": "authors\/July2017\/vSm5qpNBJ8vw5v7a6wGz.png",
+            "nation": "iranian",
+            "created_at": "2017-07-27 17:18:21",
+            "updated_at": "2017-07-27 17:18:21",
             "deleted_at": null,
-            "books": [
-                {
-                    "id": 1,
-                    "name": "book1",
-                    "description": null,
-                    "time": "2 ساعت و 26 دقیقه",
-                    "page_number": null,
-                    "publisher": "publisher",
-                    "audio_publisher": null,
-                    "publish_year": 1396,
-                    "audio_publish_year": null,
-                    "language": null,
-                    "summary": null,
-                    "file": "file1.pdf",
-                    "file_size": null,
-                    "image": null,
-                    "created_at": null,
-                    "updated_at": null,
-                    "deleted_at": null,
-                    "authors": "author1,author2,author3",
-                    "narrators": "narrator1,narrator2",
-                    "genres": "genre1,genre2,genre3",
-                    "rate": 1.5,
-                    "pivot": {
-                        "author_id": 1,
-                        "book_id": 1
-                    }
-                },
-                {
-                    "id": 2,
-                    "name": "book2",
-                    "description": null,
-                    "time": "3 ساعت و 26 دقیقه",
-                    "page_number": null,
-                    "publisher": "publisher",
-                    "audio_publisher": null,
-                    "publish_year": 1397,
-                    "audio_publish_year": null,
-                    "language": null,
-                    "summary": null,
-                    "file": "file2.pdf",
-                    "file_size": null,
-                    "image": null,
-                    "created_at": null,
-                    "updated_at": null,
-                    "deleted_at": null,
-                    "authors": "author1,author5",
-                    "narrators": "narrator1",
-                    "genres": "genre1,genre5",
-                    "rate": 4,
-                    "pivot": {
-                        "author_id": 1,
-                        "book_id": 2
-                    }
-                }
-            ],
-            "genres": "genre1,genre2,genre3",
-            "rate": 2.5,
-            "related_author": {
-                "1": "author2"
-            },
-            "reviews": [
-                {
-                    "id": 1,
-                    "name": "user1",
-                    "email": "user1@yahoo.com",
-                    "image": null,
-                    "activated": 1,
-                    "api_token": "Ur2jwparrXpPO5SsVwr1XuNlK5BlMu0X2k2KkJQM30PDpeCPaaH5lWgBpPC9",
-                    "created_at": null,
-                    "updated_at": null,
-                    "pivot": {
-                        "author_id": 1,
-                        "user_id": 1,
-                        "comment": "co1",
-                        "rate": 1,
-                        "enable": 1,
-                        "created_at": null,
-                        "updated_at": null
-                    }
-                },
-                {
-                    "id": 2,
-                    "name": "user2",
-                    "email": "user2@yahoo.com",
-                    "image": null,
-                    "activated": 0,
-                    "api_token": "Ur2jwparrXpPO5SsVwr1XuNlK5BlMu0X2k2KkJQM30PDpeCPaaH5lWgBpPC9111",
-                    "created_at": null,
-                    "updated_at": null,
-                    "pivot": {
-                        "author_id": 1,
-                        "user_id": 2,
-                        "comment": "co4",
-                        "rate": 4,
-                        "enable": 1,
-                        "created_at": null,
-                        "updated_at": null
-                    }
-                }
-            ]
+            "books": [],
+            "genres": "",
+            "rate": 0,
+            "related_author": [],
+            "reviews": []
         }
     },
     "result": 1,
@@ -297,20 +147,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/authors/{author}`
+`GET api/authors/{author}`
 
-`HEAD api/v1/authors/{author}`
+`HEAD api/authors/{author}`
 
 
-<!-- END_bb66c2842c782ae26d9782d21e5a15b2 -->
+<!-- END_31c161d4e2e8dd0cef72967cb4f6a4af -->
 
-<!-- START_f477b3ff382e2000e9a5f9b2630e470f -->
-## Search the specified author with his related tags, genres, books, name
+<!-- START_c5243d0dc9718c136d93ada58f330b62 -->
+## Author Search
+
+Search the specified author with his related tags, genres, books, name
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/searchAuthor" \
+curl -X GET "http://localhost:8000/api/searchAuthor" \
 -H "Accept: application/json"
 ```
 
@@ -318,7 +170,7 @@ curl -X GET "http://localhost/api/v1/searchAuthor" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/searchAuthor",
+    "url": "http://localhost:8000/api/searchAuthor",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -344,12 +196,12 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/searchAuthor`
+`GET api/searchAuthor`
 
-`HEAD api/v1/searchAuthor`
+`HEAD api/searchAuthor`
 
 
-<!-- END_f477b3ff382e2000e9a5f9b2630e470f -->
+<!-- END_c5243d0dc9718c136d93ada58f330b62 -->
 
 #Book
 
@@ -358,13 +210,15 @@ all functions about books :
      to show specified book and related information
 
 Class BookController
-<!-- START_81570fe29be54336ca67a7f3c307e51d -->
-## Display a listing of the books.
+<!-- START_eb8df775503b6007bbbaeec13534e2e0 -->
+## Book List
+
+Display a listing of the books.
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/books" \
+curl -X GET "http://localhost:8000/api/books" \
 -H "Accept: application/json"
 ```
 
@@ -372,7 +226,7 @@ curl -X GET "http://localhost/api/v1/books" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/books",
+    "url": "http://localhost:8000/api/books",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -393,122 +247,28 @@ $.ajax(settings).done(function (response) {
             {
                 "id": 1,
                 "name": "book1",
-                "description": null,
-                "time": "2 ساعت و 26 دقیقه",
-                "page_number": null,
+                "description": "a novel",
+                "time": "2 ساعت و 30 دقیقه",
+                "page_number": 50,
                 "publisher": "publisher",
-                "audio_publisher": null,
-                "publish_year": 1396,
+                "audio_publisher": "audio publisher",
+                "publish_year": 1345,
                 "audio_publish_year": null,
-                "language": null,
-                "summary": null,
-                "file": "file1.pdf",
-                "file_size": null,
-                "image": null,
-                "created_at": null,
-                "updated_at": null,
-                "deleted_at": null,
-                "authors": "author1,author2,author3",
-                "narrators": "narrator1,narrator2",
-                "genres": "genre1,genre2,genre3",
-                "rate": 1.5
-            },
-            {
-                "id": 2,
-                "name": "book2",
-                "description": null,
-                "time": "3 ساعت و 26 دقیقه",
-                "page_number": null,
-                "publisher": "publisher",
-                "audio_publisher": null,
-                "publish_year": 1397,
-                "audio_publish_year": null,
-                "language": null,
-                "summary": null,
-                "file": "file2.pdf",
-                "file_size": null,
-                "image": null,
-                "created_at": null,
-                "updated_at": null,
-                "deleted_at": null,
-                "authors": "author1,author5",
-                "narrators": "narrator1",
-                "genres": "genre1,genre5",
-                "rate": 4
-            },
-            {
-                "id": 3,
-                "name": "book3",
-                "description": null,
-                "time": "4 ساعت و 26 دقیقه",
-                "page_number": null,
-                "publisher": "publisher",
-                "audio_publisher": null,
-                "publish_year": 1398,
-                "audio_publish_year": null,
-                "language": null,
-                "summary": null,
-                "file": "file3.pdf",
-                "file_size": null,
-                "image": null,
-                "created_at": null,
-                "updated_at": null,
-                "deleted_at": null,
-                "authors": "",
-                "narrators": "",
-                "genres": "genre2,genre3,genre4",
-                "rate": 0
-            },
-            {
-                "id": 4,
-                "name": "book4",
-                "description": null,
-                "time": "5 ساعت و 26 دقیقه",
-                "page_number": null,
-                "publisher": "publisher",
-                "audio_publisher": null,
-                "publish_year": 1399,
-                "audio_publish_year": null,
-                "language": null,
-                "summary": null,
-                "file": "file4.pdf",
-                "file_size": null,
-                "image": null,
-                "created_at": null,
-                "updated_at": null,
-                "deleted_at": null,
-                "authors": "",
-                "narrators": "",
-                "genres": "genre4,genre5",
-                "rate": 0
-            },
-            {
-                "id": 5,
-                "name": "book5",
-                "description": null,
-                "time": "6 ساعت و 26 دقیقه",
-                "page_number": null,
-                "publisher": "publisher",
-                "audio_publisher": null,
-                "publish_year": 1400,
-                "audio_publish_year": null,
-                "language": null,
-                "summary": null,
-                "file": "file5.pdf",
-                "file_size": null,
-                "image": null,
-                "created_at": null,
-                "updated_at": null,
+                "language": "فارسی",
+                "summary": "summary summary summary summary",
+                "file": "books\/July2017\/OMfcVaYKOAd6vjDNqW6P.wma",
+                "file_size": "300 Mb",
+                "image": "books\/July2017\/37eEuUV3UjSUPj504yKO.png",
+                "created_at": "2017-07-27 17:24:00",
+                "updated_at": "2017-07-27 20:34:51",
                 "deleted_at": null,
                 "authors": "",
                 "narrators": "",
                 "genres": "",
-                "rate": 0
+                "rate": 3
             }
         ],
-        "top_books": [
-            "book2"
-        ]
+        "top_books": []
     },
     "result": 1,
     "description": "list of books",
@@ -517,20 +277,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/books`
+`GET api/books`
 
-`HEAD api/v1/books`
+`HEAD api/books`
 
 
-<!-- END_81570fe29be54336ca67a7f3c307e51d -->
+<!-- END_eb8df775503b6007bbbaeec13534e2e0 -->
 
-<!-- START_a5bf2d508ab578edc135a330ff7e0479 -->
-## Display the specified book.
+<!-- START_5037bf4b2967efcaf3ff9ef1ac4dd532 -->
+## Book
+
+Display the specified book.
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/books/{book}" \
+curl -X GET "http://localhost:8000/api/books/{book}" \
 -H "Accept: application/json"
 ```
 
@@ -538,7 +300,7 @@ curl -X GET "http://localhost/api/v1/books/{book}" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/books/{book}",
+    "url": "http://localhost:8000/api/books/{book}",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -558,123 +320,47 @@ $.ajax(settings).done(function (response) {
         "book": {
             "id": 1,
             "name": "book1",
-            "description": null,
-            "time": "2 ساعت و 26 دقیقه",
-            "page_number": null,
+            "description": "a novel",
+            "time": "2 ساعت و 30 دقیقه",
+            "page_number": 50,
             "publisher": "publisher",
-            "audio_publisher": null,
-            "publish_year": 1396,
+            "audio_publisher": "audio publisher",
+            "publish_year": 1345,
             "audio_publish_year": null,
-            "language": null,
-            "summary": null,
-            "file": "file1.pdf",
-            "file_size": null,
-            "image": null,
-            "created_at": null,
-            "updated_at": null,
+            "language": "فارسی",
+            "summary": "summary summary summary summary",
+            "file": "books\/July2017\/OMfcVaYKOAd6vjDNqW6P.wma",
+            "file_size": "300 Mb",
+            "image": "books\/July2017\/37eEuUV3UjSUPj504yKO.png",
+            "created_at": "2017-07-27 17:24:00",
+            "updated_at": "2017-07-27 20:34:51",
             "deleted_at": null,
-            "authors": "author1,author2,author3",
-            "narrators": "narrator1,narrator2",
-            "genres": "genre1,genre2,genre3",
-            "rate": 1.5,
-            "sections": [
-                {
-                    "id": 1,
-                    "chapter_number": 1,
-                    "chapter_name": "chap1",
-                    "time": "8 ساعت و 30 دقیقه",
-                    "file": "chap_file1.pdf",
-                    "book_id": 1,
-                    "created_at": null,
-                    "updated_at": null,
-                    "deleted_at": null
-                },
-                {
-                    "id": 2,
-                    "chapter_number": 2,
-                    "chapter_name": "chap2",
-                    "time": "9 ساعت و 30 دقیقه",
-                    "file": "chap_file2.pdf",
-                    "book_id": 1,
-                    "created_at": null,
-                    "updated_at": null,
-                    "deleted_at": null
-                },
-                {
-                    "id": 3,
-                    "chapter_number": 3,
-                    "chapter_name": "chap3",
-                    "time": "10 ساعت و 30 دقیقه",
-                    "file": "chap_file3.pdf",
-                    "book_id": 1,
-                    "created_at": null,
-                    "updated_at": null,
-                    "deleted_at": null
-                },
-                {
-                    "id": 4,
-                    "chapter_number": 4,
-                    "chapter_name": "chap4",
-                    "time": "11 ساعت و 30 دقیقه",
-                    "file": "chap_file4.pdf",
-                    "book_id": 1,
-                    "created_at": null,
-                    "updated_at": null,
-                    "deleted_at": null
-                },
-                {
-                    "id": 5,
-                    "chapter_number": 5,
-                    "chapter_name": "chap5",
-                    "time": "12 ساعت و 30 دقیقه",
-                    "file": "chap_file5.pdf",
-                    "book_id": 1,
-                    "created_at": null,
-                    "updated_at": null,
-                    "deleted_at": null
-                }
-            ],
-            "related_book": {
-                "1": "book2",
-                "2": "book3"
-            },
+            "authors": "",
+            "narrators": "",
+            "genres": "",
+            "rate": 3,
+            "sections": [],
+            "related_book": [],
             "reviews": [
                 {
                     "id": 1,
+                    "role_id": 1,
                     "name": "user1",
                     "email": "user1@yahoo.com",
+                    "avatar": null,
                     "image": null,
                     "activated": 1,
                     "api_token": "Ur2jwparrXpPO5SsVwr1XuNlK5BlMu0X2k2KkJQM30PDpeCPaaH5lWgBpPC9",
                     "created_at": null,
-                    "updated_at": null,
+                    "updated_at": "2017-07-27 15:21:33",
                     "pivot": {
                         "book_id": 1,
                         "user_id": 1,
-                        "comment": "co1",
-                        "rate": 2,
+                        "comment": "comment1",
+                        "rate": 3,
                         "enable": 1,
-                        "created_at": null,
-                        "updated_at": null
-                    }
-                },
-                {
-                    "id": 2,
-                    "name": "user2",
-                    "email": "user2@yahoo.com",
-                    "image": null,
-                    "activated": 0,
-                    "api_token": "Ur2jwparrXpPO5SsVwr1XuNlK5BlMu0X2k2KkJQM30PDpeCPaaH5lWgBpPC9111",
-                    "created_at": null,
-                    "updated_at": null,
-                    "pivot": {
-                        "book_id": 1,
-                        "user_id": 2,
-                        "comment": "co5",
-                        "rate": 1,
-                        "enable": 1,
-                        "created_at": null,
-                        "updated_at": null
+                        "created_at": "2017-07-27 21:30:20",
+                        "updated_at": "2017-07-27 21:30:20"
                     }
                 }
             ]
@@ -687,20 +373,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/books/{book}`
+`GET api/books/{book}`
 
-`HEAD api/v1/books/{book}`
+`HEAD api/books/{book}`
 
 
-<!-- END_a5bf2d508ab578edc135a330ff7e0479 -->
+<!-- END_5037bf4b2967efcaf3ff9ef1ac4dd532 -->
 
-<!-- START_6908f9a211388c62f49e9828346a3961 -->
-## Search the specified book with its related authors, narrators, genres, tags, name
+<!-- START_e1389f5a84f5c6031bc7e0d914f4bed3 -->
+## Book Search
+
+Search the specified book with its related authors, narrators, genres, tags, name
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/searchBook" \
+curl -X GET "http://localhost:8000/api/searchBook" \
 -H "Accept: application/json"
 ```
 
@@ -708,7 +396,7 @@ curl -X GET "http://localhost/api/v1/searchBook" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/searchBook",
+    "url": "http://localhost:8000/api/searchBook",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -734,12 +422,12 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/searchBook`
+`GET api/searchBook`
 
-`HEAD api/v1/searchBook`
+`HEAD api/searchBook`
 
 
-<!-- END_6908f9a211388c62f49e9828346a3961 -->
+<!-- END_e1389f5a84f5c6031bc7e0d914f4bed3 -->
 
 #Narrator
 
@@ -748,13 +436,15 @@ $.ajax(settings).done(function (response) {
      to show specified narrator and related information
 
 Class NarratorController
-<!-- START_b783e569ca5864fedcc5f114b0e0c3e0 -->
-## Display a listing of the narrators.
+<!-- START_29200ac93238b2ac71316c507adba351 -->
+## Narrator List
+
+Display a listing of the narrators.
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/narrators" \
+curl -X GET "http://localhost:8000/api/narrators" \
 -H "Accept: application/json"
 ```
 
@@ -762,7 +452,7 @@ curl -X GET "http://localhost/api/v1/narrators" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/narrators",
+    "url": "http://localhost:8000/api/narrators",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -779,30 +469,7 @@ $.ajax(settings).done(function (response) {
 ```json
 {
     "data": {
-        "narrators": [
-            {
-                "id": 1,
-                "name": "narrator1",
-                "introduction": null,
-                "image": null,
-                "created_at": null,
-                "updated_at": null,
-                "deleted_at": null,
-                "genres": "genre1,genre2,genre3",
-                "rate": 2.5
-            },
-            {
-                "id": 2,
-                "name": "narrator2",
-                "introduction": "intro1",
-                "image": null,
-                "created_at": null,
-                "updated_at": null,
-                "deleted_at": null,
-                "genres": "genre1,genre5",
-                "rate": 2.5
-            }
-        ],
+        "narrators": [],
         "top_narrators": []
     },
     "result": 1,
@@ -812,20 +479,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/narrators`
+`GET api/narrators`
 
-`HEAD api/v1/narrators`
+`HEAD api/narrators`
 
 
-<!-- END_b783e569ca5864fedcc5f114b0e0c3e0 -->
+<!-- END_29200ac93238b2ac71316c507adba351 -->
 
-<!-- START_c5e20b85cb81683494fa19a5ce7c6683 -->
-## Display the specified narrator.
+<!-- START_826cfaa3f91071b9fe221ad757cbc54d -->
+## Narrator
+
+Display the specified narrator.
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/narrators/{narrator}" \
+curl -X GET "http://localhost:8000/api/narrators/{narrator}" \
 -H "Accept: application/json"
 ```
 
@@ -833,7 +502,7 @@ curl -X GET "http://localhost/api/v1/narrators/{narrator}" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/narrators/{narrator}",
+    "url": "http://localhost:8000/api/narrators/{narrator}",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -849,139 +518,30 @@ $.ajax(settings).done(function (response) {
 
 ```json
 {
-    "data": {
-        "narrator": {
-            "id": 1,
-            "name": "narrator1",
-            "introduction": null,
-            "image": null,
-            "created_at": null,
-            "updated_at": null,
-            "deleted_at": null,
-            "books": [
-                {
-                    "id": 1,
-                    "name": "book1",
-                    "description": null,
-                    "time": "2 ساعت و 26 دقیقه",
-                    "page_number": null,
-                    "publisher": "publisher",
-                    "audio_publisher": null,
-                    "publish_year": 1396,
-                    "audio_publish_year": null,
-                    "language": null,
-                    "summary": null,
-                    "file": "file1.pdf",
-                    "file_size": null,
-                    "image": null,
-                    "created_at": null,
-                    "updated_at": null,
-                    "deleted_at": null,
-                    "authors": "author1,author2,author3",
-                    "narrators": "narrator1,narrator2",
-                    "genres": "genre1,genre2,genre3",
-                    "rate": 1.5,
-                    "pivot": {
-                        "narrator_id": 1,
-                        "book_id": 1
-                    }
-                },
-                {
-                    "id": 2,
-                    "name": "book2",
-                    "description": null,
-                    "time": "3 ساعت و 26 دقیقه",
-                    "page_number": null,
-                    "publisher": "publisher",
-                    "audio_publisher": null,
-                    "publish_year": 1397,
-                    "audio_publish_year": null,
-                    "language": null,
-                    "summary": null,
-                    "file": "file2.pdf",
-                    "file_size": null,
-                    "image": null,
-                    "created_at": null,
-                    "updated_at": null,
-                    "deleted_at": null,
-                    "authors": "author1,author5",
-                    "narrators": "narrator1",
-                    "genres": "genre1,genre5",
-                    "rate": 4,
-                    "pivot": {
-                        "narrator_id": 1,
-                        "book_id": 2
-                    }
-                }
-            ],
-            "genres": "genre1,genre2,genre3",
-            "rate": 2.5,
-            "related_narrator": {
-                "1": "narrator2"
-            },
-            "reviews": [
-                {
-                    "id": 1,
-                    "name": "user1",
-                    "email": "user1@yahoo.com",
-                    "image": null,
-                    "activated": 1,
-                    "api_token": "Ur2jwparrXpPO5SsVwr1XuNlK5BlMu0X2k2KkJQM30PDpeCPaaH5lWgBpPC9",
-                    "created_at": null,
-                    "updated_at": null,
-                    "pivot": {
-                        "narrator_id": 1,
-                        "user_id": 1,
-                        "comment": "co1",
-                        "rate": 1,
-                        "enable": 1,
-                        "created_at": null,
-                        "updated_at": null
-                    }
-                },
-                {
-                    "id": 2,
-                    "name": "user2",
-                    "email": "user2@yahoo.com",
-                    "image": null,
-                    "activated": 0,
-                    "api_token": "Ur2jwparrXpPO5SsVwr1XuNlK5BlMu0X2k2KkJQM30PDpeCPaaH5lWgBpPC9111",
-                    "created_at": null,
-                    "updated_at": null,
-                    "pivot": {
-                        "narrator_id": 1,
-                        "user_id": 2,
-                        "comment": "co4",
-                        "rate": 4,
-                        "enable": 1,
-                        "created_at": null,
-                        "updated_at": null
-                    }
-                }
-            ]
-        }
-    },
-    "result": 1,
-    "description": "a narrator",
-    "message": "success"
+    "data": [],
+    "result": 0,
+    "description": "wrong narrator id ",
+    "message": "failed"
 }
 ```
 
 ### HTTP Request
-`GET api/v1/narrators/{narrator}`
+`GET api/narrators/{narrator}`
 
-`HEAD api/v1/narrators/{narrator}`
+`HEAD api/narrators/{narrator}`
 
 
-<!-- END_c5e20b85cb81683494fa19a5ce7c6683 -->
+<!-- END_826cfaa3f91071b9fe221ad757cbc54d -->
 
-<!-- START_e7e056b576305480bea6450780509a89 -->
-## Search the specified narrator with his related genres, books, tags, name.
+<!-- START_eb57e186156403f743a9f8b92af72736 -->
+## Narrator Search
+
+Search the specified narrator with his related genres, books, tags, name.
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/searchNarrator" \
+curl -X GET "http://localhost:8000/api/searchNarrator" \
 -H "Accept: application/json"
 ```
 
@@ -989,7 +549,7 @@ curl -X GET "http://localhost/api/v1/searchNarrator" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/searchNarrator",
+    "url": "http://localhost:8000/api/searchNarrator",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -1015,12 +575,12 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/searchNarrator`
+`GET api/searchNarrator`
 
-`HEAD api/v1/searchNarrator`
+`HEAD api/searchNarrator`
 
 
-<!-- END_e7e056b576305480bea6450780509a89 -->
+<!-- END_eb57e186156403f743a9f8b92af72736 -->
 
 #Subscription
 
@@ -1029,13 +589,15 @@ $.ajax(settings).done(function (response) {
      to show specified subscription and related information
 
 Class SubscriptionController
-<!-- START_46dcd308965b0b9fd76e9440ef86abcd -->
-## Display a listing of the subscriptions.
+<!-- START_1d2b5f6e73105787201d992da63ae7e7 -->
+## Subscription List
+
+Display a listing of the subscriptions.
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/subscriptions" \
+curl -X GET "http://localhost:8000/api/subscriptions" \
 -H "Accept: application/json"
 ```
 
@@ -1043,7 +605,7 @@ curl -X GET "http://localhost/api/v1/subscriptions" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/subscriptions",
+    "url": "http://localhost:8000/api/subscriptions",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -1063,63 +625,51 @@ $.ajax(settings).done(function (response) {
         "subscriptions": [
             {
                 "id": 1,
-                "name": null,
+                "name": "subscription 1",
                 "subscription": null,
                 "type": 0,
-                "price": 100,
-                "created_at": null,
-                "updated_at": null,
+                "price": 12000,
+                "created_at": "2017-07-30 08:22:58",
+                "updated_at": "2017-07-30 08:22:58",
                 "deleted_at": null,
                 "type_name": "روزانه",
-                "users_number": 2
+                "users_number": 0
             },
             {
                 "id": 2,
                 "name": null,
                 "subscription": null,
-                "type": 0,
-                "price": 200,
-                "created_at": null,
-                "updated_at": null,
+                "type": 2,
+                "price": 120000,
+                "created_at": "2017-07-30 08:41:17",
+                "updated_at": "2017-07-30 08:41:17",
                 "deleted_at": null,
-                "type_name": "روزانه",
-                "users_number": 1
+                "type_name": "ماهانه",
+                "users_number": 0
             },
             {
                 "id": 3,
                 "name": null,
                 "subscription": null,
                 "type": 1,
-                "price": 300,
-                "created_at": null,
-                "updated_at": null,
+                "price": 11,
+                "created_at": "2017-07-30 08:42:45",
+                "updated_at": "2017-07-30 08:42:45",
                 "deleted_at": null,
                 "type_name": "هفتگی",
-                "users_number": 1
+                "users_number": 0
             },
             {
                 "id": 4,
                 "name": null,
                 "subscription": null,
-                "type": 2,
-                "price": 400,
-                "created_at": null,
-                "updated_at": null,
+                "type": 1,
+                "price": 34600,
+                "created_at": "2017-07-30 08:43:05",
+                "updated_at": "2017-07-30 08:43:05",
                 "deleted_at": null,
-                "type_name": "ماهانه",
+                "type_name": "هفتگی",
                 "users_number": 0
-            },
-            {
-                "id": 5,
-                "name": null,
-                "subscription": null,
-                "type": 3,
-                "price": 500,
-                "created_at": null,
-                "updated_at": null,
-                "deleted_at": null,
-                "type_name": "سالانه",
-                "users_number": 1
             }
         ]
     },
@@ -1130,20 +680,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/subscriptions`
+`GET api/subscriptions`
 
-`HEAD api/v1/subscriptions`
+`HEAD api/subscriptions`
 
 
-<!-- END_46dcd308965b0b9fd76e9440ef86abcd -->
+<!-- END_1d2b5f6e73105787201d992da63ae7e7 -->
 
-<!-- START_d398888f170a89ff50e3021d8f88fd18 -->
-## Display the specified subscription.
+<!-- START_4ba9f3f36998228e7204bdbe0dc80f5d -->
+## Subscription
+
+Display the specified subscription.
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/subscriptions/{subscription}" \
+curl -X GET "http://localhost:8000/api/subscriptions/{subscription}" \
 -H "Accept: application/json"
 ```
 
@@ -1151,7 +703,7 @@ curl -X GET "http://localhost/api/v1/subscriptions/{subscription}" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/subscriptions/{subscription}",
+    "url": "http://localhost:8000/api/subscriptions/{subscription}",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -1166,29 +718,49 @@ $.ajax(settings).done(function (response) {
 > Example response:
 
 ```json
-null
+{
+    "data": {
+        "subscriptions": {
+            "id": 1,
+            "name": "subscription 1",
+            "subscription": null,
+            "type": 0,
+            "price": 12000,
+            "created_at": "2017-07-30 08:22:58",
+            "updated_at": "2017-07-30 08:22:58",
+            "deleted_at": null,
+            "type_name": "روزانه",
+            "users_number": 0
+        }
+    },
+    "result": 1,
+    "description": "list of subscriptions with number of users that buy that subscription",
+    "message": "success"
+}
 ```
 
 ### HTTP Request
-`GET api/v1/subscriptions/{subscription}`
+`GET api/subscriptions/{subscription}`
 
-`HEAD api/v1/subscriptions/{subscription}`
+`HEAD api/subscriptions/{subscription}`
 
 
-<!-- END_d398888f170a89ff50e3021d8f88fd18 -->
+<!-- END_4ba9f3f36998228e7204bdbe0dc80f5d -->
 
 #User
 
 all related operations to specified user
 
 Class UserController
-<!-- START_82703f5860426190c1aec309db25fa45 -->
-## register specified user
+<!-- START_fcfeaaa7e2848c8ce08609235b28904a -->
+## Register
+
+register specified user
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/register" \
+curl -X GET "http://localhost:8000/api/register" \
 -H "Accept: application/json"
 ```
 
@@ -1196,7 +768,7 @@ curl -X GET "http://localhost/api/v1/register" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/register",
+    "url": "http://localhost:8000/api/register",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -1232,20 +804,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/register`
+`GET api/register`
 
-`HEAD api/v1/register`
+`HEAD api/register`
 
 
-<!-- END_82703f5860426190c1aec309db25fa45 -->
+<!-- END_fcfeaaa7e2848c8ce08609235b28904a -->
 
-<!-- START_6fe98d7ced9bf8a790a2e2c2cb69689c -->
-## login specified user
+<!-- START_10fb7d8fad114ca30c6e101867a5f70f -->
+## Login
+
+login specified user
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/login" \
+curl -X GET "http://localhost:8000/api/login" \
 -H "Accept: application/json"
 ```
 
@@ -1253,7 +827,7 @@ curl -X GET "http://localhost/api/v1/login" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/login",
+    "url": "http://localhost:8000/api/login",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -1286,20 +860,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/login`
+`GET api/login`
 
-`HEAD api/v1/login`
+`HEAD api/login`
 
 
-<!-- END_6fe98d7ced9bf8a790a2e2c2cb69689c -->
+<!-- END_10fb7d8fad114ca30c6e101867a5f70f -->
 
-<!-- START_394d402f1e299237fa88b4466e18226b -->
-## logout specified user
+<!-- START_7e6ee60aafd6de54298e0e276a7451fe -->
+## Logout
+
+logout specified user
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/logout" \
+curl -X GET "http://localhost:8000/api/logout" \
 -H "Accept: application/json"
 ```
 
@@ -1307,7 +883,54 @@ curl -X GET "http://localhost/api/v1/logout" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/logout",
+    "url": "http://localhost:8000/api/logout",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+{
+    "data": [],
+    "result": 1,
+    "description": "loged out",
+    "message": "Token Not Created"
+}
+```
+
+### HTTP Request
+`GET api/logout`
+
+`HEAD api/logout`
+
+
+<!-- END_7e6ee60aafd6de54298e0e276a7451fe -->
+
+<!-- START_d0474cc5460205e6f914e401aaeadeee -->
+## Buy Subscription
+
+buy specified subscription
+
+> Example request:
+
+```bash
+curl -X GET "http://localhost:8000/api/subscriptions/buy/{id}" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/subscriptions/buy/{id}",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -1325,26 +948,28 @@ $.ajax(settings).done(function (response) {
 {
     "data": [],
     "result": 0,
-    "description": "authentication failed",
-    "message": "Token Not Created"
+    "description": "wrong subscription id ",
+    "message": "failed"
 }
 ```
 
 ### HTTP Request
-`GET api/v1/logout`
+`GET api/subscriptions/buy/{id}`
 
-`HEAD api/v1/logout`
+`HEAD api/subscriptions/buy/{id}`
 
 
-<!-- END_394d402f1e299237fa88b4466e18226b -->
+<!-- END_d0474cc5460205e6f914e401aaeadeee -->
 
-<!-- START_a00ddcb2bce017ca893fb5d0e8a26508 -->
-## buy specified subscription
+<!-- START_91487fe4f3ca393494680430f6661ea2 -->
+## Verify
+
+verify bought subscription
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/subscriptions/buy/{id}" \
+curl -X POST "http://localhost:8000/api/subscriptions/verify" \
 -H "Accept: application/json"
 ```
 
@@ -1352,47 +977,7 @@ curl -X GET "http://localhost/api/v1/subscriptions/buy/{id}" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/subscriptions/buy/{id}",
-    "method": "GET",
-    "headers": {
-        "accept": "application/json"
-    }
-}
-
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
-```
-
-> Example response:
-
-```json
-null
-```
-
-### HTTP Request
-`GET api/v1/subscriptions/buy/{id}`
-
-`HEAD api/v1/subscriptions/buy/{id}`
-
-
-<!-- END_a00ddcb2bce017ca893fb5d0e8a26508 -->
-
-<!-- START_2633cc70ba1956ea8dded5a24553d5b3 -->
-## verify bought subscription
-
-> Example request:
-
-```bash
-curl -X POST "http://localhost/api/v1/subscriptions/verify" \
--H "Accept: application/json"
-```
-
-```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/v1/subscriptions/verify",
+    "url": "http://localhost:8000/api/subscriptions/verify",
     "method": "POST",
     "headers": {
         "accept": "application/json"
@@ -1406,18 +991,20 @@ $.ajax(settings).done(function (response) {
 
 
 ### HTTP Request
-`POST api/v1/subscriptions/verify`
+`POST api/subscriptions/verify`
 
 
-<!-- END_2633cc70ba1956ea8dded5a24553d5b3 -->
+<!-- END_91487fe4f3ca393494680430f6661ea2 -->
 
-<!-- START_e507ffcda3a937b22a5970cdefea7032 -->
-## get specified book by subscription the user bought
+<!-- START_93fb30738cd51426e2b7af103ad4df42 -->
+## Get Book
+
+get specified book by subscription the user bought
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/books/get/{id}" \
+curl -X GET "http://localhost:8000/api/books/get/{id}" \
 -H "Accept: application/json"
 ```
 
@@ -1425,7 +1012,7 @@ curl -X GET "http://localhost/api/v1/books/get/{id}" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/books/get/{id}",
+    "url": "http://localhost:8000/api/books/get/{id}",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -1449,20 +1036,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/books/get/{id}`
+`GET api/books/get/{id}`
 
-`HEAD api/v1/books/get/{id}`
+`HEAD api/books/get/{id}`
 
 
-<!-- END_e507ffcda3a937b22a5970cdefea7032 -->
+<!-- END_93fb30738cd51426e2b7af103ad4df42 -->
 
-<!-- START_1cbac528a51511bb73d9f23557c22220 -->
-## add new wish book
+<!-- START_b099fb90fee0214f6f02ecfaeb83d001 -->
+## Wish Book
+
+add new wish book
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/books/wish/{id}" \
+curl -X GET "http://localhost:8000/api/books/wish/{id}" \
 -H "Accept: application/json"
 ```
 
@@ -1470,7 +1059,7 @@ curl -X GET "http://localhost/api/v1/books/wish/{id}" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/books/wish/{id}",
+    "url": "http://localhost:8000/api/books/wish/{id}",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -1494,20 +1083,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/books/wish/{id}`
+`GET api/books/wish/{id}`
 
-`HEAD api/v1/books/wish/{id}`
+`HEAD api/books/wish/{id}`
 
 
-<!-- END_1cbac528a51511bb73d9f23557c22220 -->
+<!-- END_b099fb90fee0214f6f02ecfaeb83d001 -->
 
-<!-- START_81f37b479d4dcd6728b3126f273fd667 -->
-## add new genre for user
+<!-- START_f2a16824dfa30dc02205915bb0101431 -->
+## Get Genre
+
+add new genre for user
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/genres/get/{id}" \
+curl -X GET "http://localhost:8000/api/genres/get/{id}" \
 -H "Accept: application/json"
 ```
 
@@ -1515,7 +1106,7 @@ curl -X GET "http://localhost/api/v1/genres/get/{id}" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/genres/get/{id}",
+    "url": "http://localhost:8000/api/genres/get/{id}",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -1539,20 +1130,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/genres/get/{id}`
+`GET api/genres/get/{id}`
 
-`HEAD api/v1/genres/get/{id}`
+`HEAD api/genres/get/{id}`
 
 
-<!-- END_81f37b479d4dcd6728b3126f273fd667 -->
+<!-- END_f2a16824dfa30dc02205915bb0101431 -->
 
-<!-- START_687be18b8fdde1b85f8e63f1c70a7a5c -->
-## change password
+<!-- START_0a1e3650ed394f2132198f8a7225c8b3 -->
+## Change Password
+
+change password
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/password/change" \
+curl -X GET "http://localhost:8000/api/password/change" \
 -H "Accept: application/json"
 ```
 
@@ -1560,7 +1153,7 @@ curl -X GET "http://localhost/api/v1/password/change" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/password/change",
+    "url": "http://localhost:8000/api/password/change",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -1584,20 +1177,22 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/password/change`
+`GET api/password/change`
 
-`HEAD api/v1/password/change`
+`HEAD api/password/change`
 
 
-<!-- END_687be18b8fdde1b85f8e63f1c70a7a5c -->
+<!-- END_0a1e3650ed394f2132198f8a7225c8b3 -->
 
-<!-- START_df7685810b87ea446da1641963360da6 -->
-## upload photo
+<!-- START_8c01d5d0e13f9edb45404d25ffc1a6ce -->
+## Upload Photo
+
+upload photo
 
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/v1/image/upload" \
+curl -X GET "http://localhost:8000/api/image/upload" \
 -H "Accept: application/json"
 ```
 
@@ -1605,7 +1200,7 @@ curl -X GET "http://localhost/api/v1/image/upload" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/v1/image/upload",
+    "url": "http://localhost:8000/api/image/upload",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -1629,10 +1224,151 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/v1/image/upload`
+`GET api/image/upload`
 
-`HEAD api/v1/image/upload`
+`HEAD api/image/upload`
 
 
-<!-- END_df7685810b87ea446da1641963360da6 -->
+<!-- END_8c01d5d0e13f9edb45404d25ffc1a6ce -->
+
+<!-- START_8131605db2a5916714b0e783e896f5d2 -->
+## Review Book
+
+user review specified book
+
+> Example request:
+
+```bash
+curl -X GET "http://localhost:8000/api/books/review/{id}" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/books/review/{id}",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+{
+    "data": [],
+    "result": 0,
+    "description": "wrong api_token ",
+    "message": "failed"
+}
+```
+
+### HTTP Request
+`GET api/books/review/{id}`
+
+`HEAD api/books/review/{id}`
+
+
+<!-- END_8131605db2a5916714b0e783e896f5d2 -->
+
+<!-- START_0659b1d9673ff310a8662b33707c4ed6 -->
+## Review Author
+
+user review specified author
+
+> Example request:
+
+```bash
+curl -X GET "http://localhost:8000/api/authors/review/{id}" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/authors/review/{id}",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+{
+    "data": [],
+    "result": 0,
+    "description": "wrong api_token ",
+    "message": "failed"
+}
+```
+
+### HTTP Request
+`GET api/authors/review/{id}`
+
+`HEAD api/authors/review/{id}`
+
+
+<!-- END_0659b1d9673ff310a8662b33707c4ed6 -->
+
+<!-- START_1267355dfe51119dd150606cc32f447d -->
+## Review Narrator
+
+user review specified narrator
+
+> Example request:
+
+```bash
+curl -X GET "http://localhost:8000/api/narrators/review/{id}" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/narrators/review/{id}",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+{
+    "data": [],
+    "result": 0,
+    "description": "wrong api_token ",
+    "message": "failed"
+}
+```
+
+### HTTP Request
+`GET api/narrators/review/{id}`
+
+`HEAD api/narrators/review/{id}`
+
+
+<!-- END_1267355dfe51119dd150606cc32f447d -->
 

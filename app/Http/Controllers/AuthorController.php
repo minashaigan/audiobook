@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 class AuthorController extends Controller
 {
     /**
+     * Author List
+     * 
      * Display a listing of the authors.
      * 
      * @return \Illuminate\Http\JsonResponse
@@ -55,6 +57,8 @@ class AuthorController extends Controller
     }
 
     /**
+     * Author
+     * 
      * Display the specified author.
      * 
      * @param $id
@@ -62,85 +66,92 @@ class AuthorController extends Controller
      */
     public function show($id)
     {
-        $author = Author::query()->findOrFail($id);
-        $author["books"] = $author->books()->get();
-        foreach ($author["books"] as $book){
-            $book["authors"]="";
-            $counter=0;
-            foreach ($book->authors()->get() as $bookauthor){
-                if($counter)
-                    $book["authors"]=$book['authors'].",".$bookauthor->name;
+        $author = Author::query()->find($id);
+        if($author) {
+            $author["books"] = $author->books()->get();
+            foreach ($author["books"] as $book) {
+                $book["authors"] = "";
+                $counter = 0;
+                foreach ($book->authors()->get() as $bookauthor) {
+                    if ($counter)
+                        $book["authors"] = $book['authors'] . "," . $bookauthor->name;
+                    else
+                        $book["authors"] = $bookauthor->name;
+                    $counter++;
+                }
+                $book["narrators"] = "";
+                $counter = 0;
+                foreach ($book->narrators()->get() as $narrator) {
+                    if ($counter)
+                        $book["narrators"] = $book['narrators'] . "," . $narrator->name;
+                    else
+                        $book["narrators"] = $narrator->name;
+                    $counter++;
+                }
+                $book["genres"] = "";
+                $counter = 0;
+                foreach ($book->genres()->get() as $genre) {
+                    if ($counter)
+                        $book["genres"] = $book['genres'] . "," . $genre->name;
+                    else
+                        $book["genres"] = $genre->name;
+                    $counter++;
+                }
+                $rate_count = 0;
+                $rate_value = 0;
+                foreach ($book->reviews()->wherePivot('enable', 1)->get() as $review) {
+                    if ($review->pivot->rate) {
+                        $rate_count++;
+                        $rate_value += $review->pivot->rate;
+                    }
+                }
+                if ($rate_count == 0)
+                    $book['rate'] = 0;
                 else
-                    $book["authors"]=$bookauthor->name;
+                    $book['rate'] = $rate_value / $rate_count;
+            }
+            $author["genres"] = "";
+            $counter = 0;
+            foreach ($author->genres()->get() as $genre) {
+                if ($counter)
+                    $author["genres"] = $author['genres'] . "," . $genre->name;
+                else
+                    $author["genres"] = $genre->name;
                 $counter++;
             }
-            $book["narrators"]="";
-            $counter=0;
-            foreach ($book->narrators()->get() as $narrator){
-                if($counter)
-                    $book["narrators"]=$book['narrators'].",".$narrator->name;
-                else
-                    $book["narrators"]=$narrator->name;
-                $counter++;
-            }
-            $book["genres"]="";
-            $counter=0;
-            foreach ($book->genres()->get() as $genre){
-                if($counter)
-                    $book["genres"]=$book['genres'].",".$genre->name;
-                else
-                    $book["genres"]=$genre->name;
-                $counter++;
-            }
-            $rate_count=0;
-            $rate_value=0;
-            foreach ($book->reviews()->wherePivot('enable',1)->get() as $review){
-                if($review->pivot->rate) {
+            $rate_count = 0;
+            $rate_value = 0;
+            foreach ($author->reviews()->wherePivot('enable', 1)->get() as $review) {
+                if ($review->pivot->rate) {
                     $rate_count++;
                     $rate_value += $review->pivot->rate;
                 }
             }
-            if($rate_count == 0)
-                $book['rate']=0;
+            if ($rate_count == 0)
+                $author['rate'] = 0;
             else
-                $book['rate']=$rate_value/$rate_count;
-        }
-        $author["genres"]="";
-        $counter=0;
-        foreach ($author->genres()->get() as $genre){
-            if($counter)
-                $author["genres"]=$author['genres'].",".$genre->name;
-            else
-                $author["genres"]=$genre->name;
-            $counter++;
-        }
-        $rate_count=0;
-        $rate_value=0;
-        foreach ($author->reviews()->wherePivot('enable',1)->get() as $review){
-            if($review->pivot->rate) {
-                $rate_count++;
-                $rate_value += $review->pivot->rate;
+                $author['rate'] = $rate_value / $rate_count;
+            $relating = [];
+            foreach ($author->genres()->get() as $genre) {
+                $related_book = Author::query()->whereHas('genres', function ($query) use ($genre) {
+                    $query->where('genre_id', $genre->id);
+                })->distinct()->get();
+                if ($related_book)
+                    foreach ($related_book as $relate)
+                        $relating[] = $relate->name;
             }
+            $author['related_author'] = array_diff(array_values(array_unique($relating)), array($author->name));
+            $author['reviews'] = $author->reviews()->wherePivot('enable', 1)->get();
+            return response()->json(['data' => ['author' => $author], 'result' => 1, 'description' => 'an author', 'message' => 'success']);
         }
-        if($rate_count == 0)
-            $author['rate']=0;
-        else
-            $author['rate']=$rate_value/$rate_count;
-        $relating = [];
-        foreach ($author->genres()->get() as $genre){
-            $related_book = Author::whereHas('genres', function ($query) use ($genre) {
-                $query->where('genre_id', $genre->id);
-            })->distinct()->get();
-            if($related_book)
-                foreach ($related_book as $relate)
-                    $relating[] = $relate->name;
+        else{
+            return response()->json(['data' => [], 'result' => 0, 'description' => 'wrong author id ', 'message' => 'failed']);
         }
-        $author['related_author'] = array_diff(array_values(array_unique($relating)),array($author->name));
-        $author['reviews'] =  $author->reviews()->wherePivot('enable',1)->get();
-        return response()->json(['data'=>['author'=>$author],'result'=>1,'description'=>'an author','message'=>'success']);
     }
 
     /**
+     * Author Search
+     * 
      * Search the specified author with his related tags, genres, books, name 
      * 
      * @param Request $request
@@ -150,10 +161,10 @@ class AuthorController extends Controller
     {
         $search = [];
         if($request->input('search')) {
-            $tags = Tag::where('name', 'like', $request->input('search'))->get();
+            $tags = Tag::query()->where('name', 'like', $request->input('search'))->get();
             if (count($tags)) {
                 foreach ($tags as $tag) {
-                    $authors = Author::whereHas('tags', function ($query) use ($tag) {
+                    $authors = Author::query()->whereHas('tags', function ($query) use ($tag) {
                         $query->where('tag_id', $tag->id);
                     })->distinct()->get();
                     foreach ($authors as $author) {
@@ -183,10 +194,10 @@ class AuthorController extends Controller
                         $search[] = $author;
                 }
             }
-            $genres = Genre::where('name', 'like', $request->input('search'))->get();
+            $genres = Genre::query()->where('name', 'like', $request->input('search'))->get();
             if (count($genres)) {
                 foreach ($genres as $genre) {
-                    $authors = Author::whereHas('genres', function ($query) use ($genre) {
+                    $authors = Author::query()->whereHas('genres', function ($query) use ($genre) {
                         $query->where('genre_id', $genre->id);
                     })->distinct()->get();
                     foreach ($authors as $author) {
@@ -216,7 +227,7 @@ class AuthorController extends Controller
                         $search[] = $author;
                 }
             }
-            $authors = Author::where('name', 'like', $request->input('search'))->get();
+            $authors = Author::query()->where('name', 'like', $request->input('search'))->get();
             if (count($authors)) {
                 foreach ($authors as $author) {
                     $author["genres"] = "";
@@ -244,10 +255,10 @@ class AuthorController extends Controller
                     $search[] = $author;
                 }
             }
-            $books = Book::where('name', 'like', $request->input('search'))->get();
+            $books = Book::query()->where('name', 'like', $request->input('search'))->get();
             if (count($books)) {
                 foreach ($books as $book) {
-                    $authors = Author::whereHas('books', function ($query) use ($book) {
+                    $authors = Author::query()->whereHas('books', function ($query) use ($book) {
                         $query->where('book_id', $book->id);
                     })->distinct()->get();
                     foreach ($authors as $author) {
@@ -276,6 +287,9 @@ class AuthorController extends Controller
                     foreach ($authors as $author)
                         $search[] = $author;
                 }
+            }
+            else{
+                return response()->json(['data' => [], 'result' => 0, 'description' => 'there is no such an item', 'message' => 'موردی یافت نشد']);
             }
         }
         return response()->json(['data'=>['search_result'=>array_unique($search)],'result'=>1,'description'=>'list of authors by searching','message'=>'success']);

@@ -61,21 +61,27 @@ class User extends Authenticatable
      */
     public function book_reviews()
     {
-        return $this->belongsToMany('App\Book', 'user_review_book', 'user_id', 'book_id');
+        return $this->belongsToMany('App\Book', 'user_review_book', 'user_id', 'book_id')
+            ->withPivot('comment','rate')
+            ->withTimestamps();
     }
     /**
      * The authors that review by the user.
      */
     public function author_reviews()
     {
-        return $this->belongsToMany('App\Author', 'user_review_author', 'user_id', 'author_id');
+        return $this->belongsToMany('App\Author', 'user_review_author', 'user_id', 'author_id')
+            ->withPivot('comment','rate')
+            ->withTimestamps();
     }
     /**
      * The narrators that review by the user.
      */
     public function narrator_reviews()
     {
-        return $this->belongsToMany('App\Narrator', 'user_review_narrator', 'user_id', 'narrator_id');
+        return $this->belongsToMany('App\Narrator', 'user_review_narrator', 'user_id', 'narrator_id')
+            ->withPivot('comment','rate')
+            ->withTimestamps();
     }
     /**
      * Get the transactions for the user.
