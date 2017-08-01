@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Narrator;
-use App\Tag;
 use App\Book;
 use App\Genre;
+use App\Tag;
 use Illuminate\Http\Request;
 
 /**
  * @resource Narrator
- * 
+ *
  *  all functions about narrators :
  *      to show all narrators , top narrators with their information
  *      to show specified narrator and related information
- * 
+ *
  * Class NarratorController
  * @package App\Http\Controllers
  */
@@ -22,9 +22,9 @@ class NarratorController extends Controller
 {
     /**
      * Narrator List
-     * 
+     *
      * Display a listing of the narrators.
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
@@ -61,9 +61,9 @@ class NarratorController extends Controller
 
     /**
      * Narrator
-     * 
+     *
      * Display the specified narrator.
-     * 
+     *
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
@@ -154,9 +154,9 @@ class NarratorController extends Controller
 
     /**
      * Narrator Search
-     * 
+     *
      * Search the specified narrator with his related genres, books, tags, name.
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -164,13 +164,11 @@ class NarratorController extends Controller
     {
         $search = [];
         if($request->input('search')) {
-            $tags = Tag::query()->where('name', 'like', $request->input('search'))->get();
+            $tags = Tag::query()->where('taggable_type','App\Narrator')->where('tag_slug', 'like', $request->input('search'))->get();
             if (count($tags)) {
                 foreach ($tags as $tag) {
-                    $narrators = Narrator::query()->whereHas('tags', function ($query) use ($tag) {
-                        $query->where('tag_id', $tag->id);
-                    })->distinct()->get();
-                    foreach ($narrators as $narrator) {
+                    $narrator = Narrator::query()->find($tag->taggable_id);
+                    if($narrator) {
                         $narrator["genres"] = "";
                         $counter = 0;
                         foreach ($narrator->genres()->get() as $genre) {
@@ -192,9 +190,8 @@ class NarratorController extends Controller
                             $narrator['rate'] = 0;
                         else
                             $narrator['rate'] = $rate_value / $rate_count;
-                    }
-                    foreach ($narrators as $narrator)
                         $search[] = $narrator;
+                    }
                 }
             }
             $genres = Genre::query()->where('name', 'like', $request->input('search'))->get();
@@ -291,7 +288,7 @@ class NarratorController extends Controller
                         $search[] = $narrator;
                 }
             }
-            else{
+            if(!count($tags) and !count($narrators) and !count($books) and !count($genres)){
                 return response()->json(['data' => [], 'result' => 0, 'description' => 'there is no such an item ', 'message' => 'موردی یافت نشد']);
             }
         }

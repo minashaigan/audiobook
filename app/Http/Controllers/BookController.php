@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Author;
 use App\Book;
 use App\Narrator;
-use App\Tag;
 use App\Genre;
+use App\Tag;
 use Illuminate\Http\Request;
 
 /**
- * 
+ *
  * @resource Book
- * 
+ *
  * all functions about books :
  *      to show all books , top books with their information
  *      to show specified book and related information
@@ -25,7 +25,7 @@ class BookController extends Controller
 {
     /**
      * Book List
-     * 
+     *
      * Display a listing of the books.
      *
      * @return \Illuminate\Http\Response
@@ -81,7 +81,7 @@ class BookController extends Controller
     }
     /**
      * Book
-     * 
+     *
      * Display the specified book.
      *
      * @param  int  $id
@@ -150,7 +150,7 @@ class BookController extends Controller
     }
     /**
      * Book Search
-     * 
+     *
      * Search the specified book with its related authors, narrators, genres, tags, name
      *
      * @param Request $request
@@ -160,55 +160,52 @@ class BookController extends Controller
     {
         $search = [];
         if ($request->input('search')) {
-            $tags = Tag::query()->where('name', 'like', $request->input('search'))->get();
+            $tags = Tag::query()->where('taggable_type','App\Book')->where('tag_slug', 'like', $request->input('search'))->get();
             if (count($tags)) {
                 foreach ($tags as $tag) {
-                    $books = Book::query()->whereHas('tags', function ($query) use ($tag) {
-                        $query->where('tag_id', $tag->id);
-                    })->distinct()->get();
-                    foreach ($books as $book) {
-                        $book["authors"]="";
-                        $counter=0;
-                        foreach ($book->authors()->get() as $author){
-                            if($counter)
-                                $book["authors"]=$book['authors'].",".$author->name;
+                    $book = Book::query()->find($tag->taggable_id);
+                    if($book) {
+                        $book["authors"] = "";
+                        $counter = 0;
+                        foreach ($book->authors()->get() as $author) {
+                            if ($counter)
+                                $book["authors"] = $book['authors'] . "," . $author->name;
                             else
-                                $book["authors"]=$author->name;
+                                $book["authors"] = $author->name;
                             $counter++;
                         }
-                        $book["narrators"]="";
-                        $counter=0;
-                        foreach ($book->narrators()->get() as $narrator){
-                            if($counter)
-                                $book["narrators"]=$book['narrators'].",".$narrator->name;
+                        $book["narrators"] = "";
+                        $counter = 0;
+                        foreach ($book->narrators()->get() as $narrator) {
+                            if ($counter)
+                                $book["narrators"] = $book['narrators'] . "," . $narrator->name;
                             else
-                                $book["narrators"]=$narrator->name;
+                                $book["narrators"] = $narrator->name;
                             $counter++;
                         }
-                        $book["genres"]="";
-                        $counter=0;
-                        foreach ($book->genres()->get() as $genre){
-                            if($counter)
-                                $book["genres"]=$book['genres'].",".$genre->name;
+                        $book["genres"] = "";
+                        $counter = 0;
+                        foreach ($book->genres()->get() as $genre) {
+                            if ($counter)
+                                $book["genres"] = $book['genres'] . "," . $genre->name;
                             else
-                                $book["genres"]=$genre->name;
+                                $book["genres"] = $genre->name;
                             $counter++;
                         }
-                        $rate_count=0;
-                        $rate_value=0;
-                        foreach ($book->reviews()->wherePivot('enable',1)->get() as $review){
-                            if($review->pivot->rate) {
+                        $rate_count = 0;
+                        $rate_value = 0;
+                        foreach ($book->reviews()->wherePivot('enable', 1)->get() as $review) {
+                            if ($review->pivot->rate) {
                                 $rate_count++;
                                 $rate_value += $review->pivot->rate;
                             }
                         }
-                        if($rate_count == 0)
-                            $book['rate']=0;
+                        if ($rate_count == 0)
+                            $book['rate'] = 0;
                         else
-                            $book['rate']=$rate_value/$rate_count;
-                    }
-                    foreach ($books as $book)
+                            $book['rate'] = $rate_value / $rate_count;
                         $search[] = $book;
+                    }
                 }
             }
             $authors = Author::query()->where('name', 'like', $request->input('search'))->get();
@@ -409,7 +406,7 @@ class BookController extends Controller
                     $search[] = $book;
                 }
             }
-            else{
+            if(!count($tags) and !count($authors) and !count($narrators) and !count($books) and !count($genres)) {
                 return response()->json(['data' => [], 'result' => 0, 'description' => 'no such a data found ', 'message' => 'موردی یافت نشد.']);
             }
         }

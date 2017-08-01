@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Config;
 
 /**
  * @resource Subscription
- * 
+ *
  *  all functions about subscriptions :
  *      to show all subscriptions , top subscription by number users use that subscription with their information
  *      to show specified subscription and related information
- * 
+ *
  * Class SubscriptionController
  * @package App\Http\Controllers
  */

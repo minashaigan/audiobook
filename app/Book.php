@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Conner\Tagging\Taggable;
 
 class Book extends Model
 {
+    use Taggable;
     /**
      * The attributes that are mass assignable.
      *
@@ -51,13 +53,6 @@ class Book extends Model
     public function narrators()
     {
         return $this->belongsToMany('App\Narrator', 'book_narrator', 'book_id', 'narrator_id');
-    }
-    /**
-     * The tags of the book.
-     */
-    public function tags()
-    {
-        return $this->belongsToMany('App\Tag', 'book_tag', 'book_id', 'tag_id');
     }
     /**
      * The genres of the book.

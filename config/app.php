@@ -179,6 +179,8 @@ return [
         Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
         TCG\Voyager\VoyagerServiceProvider::class,
 
+        \Conner\Tagging\Providers\TaggingServiceProvider::class,
+
     ],
 
     /*

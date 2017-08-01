@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Conner\Tagging\Taggable;
 
 class Narrator extends Model
 {
+    use Taggable;
     /**
      * The attributes that are mass assignable.
      *

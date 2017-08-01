@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Conner\Tagging\Taggable;
 
 class Author extends Model
 {
+    use Taggable;
     /**
      * The attributes that are mass assignable.
      *
@@ -36,12 +38,5 @@ class Author extends Model
         return $this->belongsToMany('App\User', 'user_review_author', 'author_id', 'user_id')
         ->withPivot('comment','rate','enable')
             ->withTimestamps();
-    }
-    /**
-     * The tags of the author.
-     */
-    public function tags()
-    {
-        return $this->belongsToMany('App\Tag', 'author_tag', 'author_id', 'tag_id');
     }
 }

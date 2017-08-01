@@ -353,6 +353,8 @@ $.ajax(settings).done(function (response) {
                     "api_token": "Ur2jwparrXpPO5SsVwr1XuNlK5BlMu0X2k2KkJQM30PDpeCPaaH5lWgBpPC9",
                     "created_at": null,
                     "updated_at": "2017-07-27 15:21:33",
+                    "phone": null,
+                    "finance_amount": 0,
                     "pivot": {
                         "book_id": 1,
                         "user_id": 1,
@@ -469,7 +471,19 @@ $.ajax(settings).done(function (response) {
 ```json
 {
     "data": {
-        "narrators": [],
+        "narrators": [
+            {
+                "id": 1,
+                "name": "narrator",
+                "introduction": null,
+                "image": null,
+                "created_at": "2017-07-31 06:24:38",
+                "updated_at": "2017-07-31 06:24:38",
+                "deleted_at": null,
+                "genres": "",
+                "rate": 0
+            }
+        ],
         "top_narrators": []
     },
     "result": 1,
@@ -518,10 +532,25 @@ $.ajax(settings).done(function (response) {
 
 ```json
 {
-    "data": [],
-    "result": 0,
-    "description": "wrong narrator id ",
-    "message": "failed"
+    "data": {
+        "narrator": {
+            "id": 1,
+            "name": "narrator",
+            "introduction": null,
+            "image": null,
+            "created_at": "2017-07-31 06:24:38",
+            "updated_at": "2017-07-31 06:24:38",
+            "deleted_at": null,
+            "books": [],
+            "genres": "",
+            "rate": 0,
+            "related_narrator": [],
+            "reviews": []
+        }
+    },
+    "result": 1,
+    "description": "a narrator",
+    "message": "success"
 }
 ```
 
@@ -626,48 +655,48 @@ $.ajax(settings).done(function (response) {
             {
                 "id": 1,
                 "name": "subscription 1",
-                "subscription": null,
                 "type": 0,
                 "price": 12000,
                 "created_at": "2017-07-30 08:22:58",
                 "updated_at": "2017-07-30 08:22:58",
                 "deleted_at": null,
+                "description": null,
                 "type_name": "روزانه",
                 "users_number": 0
             },
             {
                 "id": 2,
                 "name": null,
-                "subscription": null,
                 "type": 2,
                 "price": 120000,
                 "created_at": "2017-07-30 08:41:17",
                 "updated_at": "2017-07-30 08:41:17",
                 "deleted_at": null,
+                "description": null,
                 "type_name": "ماهانه",
                 "users_number": 0
             },
             {
                 "id": 3,
                 "name": null,
-                "subscription": null,
                 "type": 1,
                 "price": 11,
                 "created_at": "2017-07-30 08:42:45",
                 "updated_at": "2017-07-30 08:42:45",
                 "deleted_at": null,
+                "description": null,
                 "type_name": "هفتگی",
                 "users_number": 0
             },
             {
                 "id": 4,
                 "name": null,
-                "subscription": null,
                 "type": 1,
                 "price": 34600,
                 "created_at": "2017-07-30 08:43:05",
                 "updated_at": "2017-07-30 08:43:05",
                 "deleted_at": null,
+                "description": null,
                 "type_name": "هفتگی",
                 "users_number": 0
             }
@@ -723,12 +752,12 @@ $.ajax(settings).done(function (response) {
         "subscriptions": {
             "id": 1,
             "name": "subscription 1",
-            "subscription": null,
             "type": 0,
             "price": 12000,
             "created_at": "2017-07-30 08:22:58",
             "updated_at": "2017-07-30 08:22:58",
             "deleted_at": null,
+            "description": null,
             "type_name": "روزانه",
             "users_number": 0
         }
@@ -788,6 +817,9 @@ $.ajax(settings).done(function (response) {
         "errors": {
             "name": [
                 "وارد کردن نام شما ضروری است "
+            ],
+            "phone": [
+                "موبایل الزامی است."
             ],
             "email": [
                 "وارد کردن ایمیل شما ضروری است "
@@ -901,8 +933,8 @@ $.ajax(settings).done(function (response) {
 {
     "data": [],
     "result": 1,
-    "description": "loged out",
-    "message": "Token Not Created"
+    "description": "logging out successfully",
+    "message": "success"
 }
 ```
 
@@ -996,6 +1028,88 @@ $.ajax(settings).done(function (response) {
 
 <!-- END_91487fe4f3ca393494680430f6661ea2 -->
 
+<!-- START_bd8d2870cf35dee7f68acea8c7d41114 -->
+## increase Credit
+
+to buy books user can increase his credit
+
+> Example request:
+
+```bash
+curl -X GET "http://localhost:8000/api/users/credit" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/users/credit",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+{
+    "data": [],
+    "result": 0,
+    "description": "negative or zero amount of money",
+    "message": "failed"
+}
+```
+
+### HTTP Request
+`GET api/users/credit`
+
+`HEAD api/users/credit`
+
+
+<!-- END_bd8d2870cf35dee7f68acea8c7d41114 -->
+
+<!-- START_7d305d3ca38f13b611e1594f208093c0 -->
+## Verify
+
+verify increased credit
+
+> Example request:
+
+```bash
+curl -X POST "http://localhost:8000/api/users/credit/verify" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/users/credit/verify",
+    "method": "POST",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+
+### HTTP Request
+`POST api/users/credit/verify`
+
+
+<!-- END_7d305d3ca38f13b611e1594f208093c0 -->
+
 <!-- START_93fb30738cd51426e2b7af103ad4df42 -->
 ## Get Book
 
@@ -1042,6 +1156,100 @@ $.ajax(settings).done(function (response) {
 
 
 <!-- END_93fb30738cd51426e2b7af103ad4df42 -->
+
+<!-- START_636395bad60b080fd88f63efd901b2e4 -->
+## Books got
+
+showing all books user get by subscription
+
+> Example request:
+
+```bash
+curl -X GET "http://localhost:8000/api/users/get/books" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/users/get/books",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+{
+    "data": [],
+    "result": 0,
+    "description": "wrong api_token ",
+    "message": "failed"
+}
+```
+
+### HTTP Request
+`GET api/users/get/books`
+
+`HEAD api/users/get/books`
+
+
+<!-- END_636395bad60b080fd88f63efd901b2e4 -->
+
+<!-- START_23eba0250f98f983c6d9585f72f25714 -->
+## Books may like
+
+according to user genres showing related books
+
+> Example request:
+
+```bash
+curl -X GET "http://localhost:8000/api/users/books" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/users/books",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+{
+    "data": [],
+    "result": 0,
+    "description": "wrong api_token ",
+    "message": "failed"
+}
+```
+
+### HTTP Request
+`GET api/users/books`
+
+`HEAD api/users/books`
+
+
+<!-- END_23eba0250f98f983c6d9585f72f25714 -->
 
 <!-- START_b099fb90fee0214f6f02ecfaeb83d001 -->
 ## Wish Book
@@ -1090,6 +1298,53 @@ $.ajax(settings).done(function (response) {
 
 <!-- END_b099fb90fee0214f6f02ecfaeb83d001 -->
 
+<!-- START_c164a5a5aeac3efccb3bd7d4d31cde62 -->
+## Delete Wish book
+
+detach a wish book for a user
+
+> Example request:
+
+```bash
+curl -X GET "http://localhost:8000/api/books/wish/delete/{id}" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/books/wish/delete/{id}",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+{
+    "data": [],
+    "result": 0,
+    "description": "wrong book id or you didn't want this book ",
+    "message": "failed"
+}
+```
+
+### HTTP Request
+`GET api/books/wish/delete/{id}`
+
+`HEAD api/books/wish/delete/{id}`
+
+
+<!-- END_c164a5a5aeac3efccb3bd7d4d31cde62 -->
+
 <!-- START_f2a16824dfa30dc02205915bb0101431 -->
 ## Get Genre
 
@@ -1136,6 +1391,53 @@ $.ajax(settings).done(function (response) {
 
 
 <!-- END_f2a16824dfa30dc02205915bb0101431 -->
+
+<!-- START_58c515e053badb27d7a683ed0764d168 -->
+## Delete User Genre
+
+detach a genre selected by a user
+
+> Example request:
+
+```bash
+curl -X GET "http://localhost:8000/api/genres/get/delete/{id}" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/genres/get/delete/{id}",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+{
+    "data": [],
+    "result": 0,
+    "description": "wrong genre id or you didn't want this genre ",
+    "message": "failed"
+}
+```
+
+### HTTP Request
+`GET api/genres/get/delete/{id}`
+
+`HEAD api/genres/get/delete/{id}`
+
+
+<!-- END_58c515e053badb27d7a683ed0764d168 -->
 
 <!-- START_0a1e3650ed394f2132198f8a7225c8b3 -->
 ## Change Password
@@ -1230,6 +1532,96 @@ $.ajax(settings).done(function (response) {
 
 
 <!-- END_8c01d5d0e13f9edb45404d25ffc1a6ce -->
+
+<!-- START_f173dc307e898f42c4167944079be1c7 -->
+## Delete User Image
+
+> Example request:
+
+```bash
+curl -X GET "http://localhost:8000/api/image/upload/delete" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/image/upload/delete",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+{
+    "data": [],
+    "result": 0,
+    "description": "there is no image to delete",
+    "message": "failed"
+}
+```
+
+### HTTP Request
+`GET api/image/upload/delete`
+
+`HEAD api/image/upload/delete`
+
+
+<!-- END_f173dc307e898f42c4167944079be1c7 -->
+
+<!-- START_bdb2e0df68d2653d9a6a3d693584fded -->
+## Delete User Account
+
+> Example request:
+
+```bash
+curl -X GET "http://localhost:8000/api/users/delete" \
+-H "Accept: application/json"
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:8000/api/users/delete",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+{
+    "data": [],
+    "result": 0,
+    "description": "wrong api_token ",
+    "message": "failed"
+}
+```
+
+### HTTP Request
+`GET api/users/delete`
+
+`HEAD api/users/delete`
+
+
+<!-- END_bdb2e0df68d2653d9a6a3d693584fded -->
 
 <!-- START_8131605db2a5916714b0e783e896f5d2 -->
 ## Review Book

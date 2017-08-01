@@ -19,9 +19,9 @@ class AuthorController extends Controller
 {
     /**
      * Author List
-     * 
+     *
      * Display a listing of the authors.
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
@@ -58,9 +58,9 @@ class AuthorController extends Controller
 
     /**
      * Author
-     * 
+     *
      * Display the specified author.
-     * 
+     *
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
@@ -106,9 +106,9 @@ class AuthorController extends Controller
                     }
                 }
                 if ($rate_count == 0)
-                    $book['rate'] = 0;
+                    $book["rate"] = 0;
                 else
-                    $book['rate'] = $rate_value / $rate_count;
+                    $book["rate"] = $rate_value / $rate_count;
             }
             $author["genres"] = "";
             $counter = 0;
@@ -128,9 +128,9 @@ class AuthorController extends Controller
                 }
             }
             if ($rate_count == 0)
-                $author['rate'] = 0;
+                $author["rate"] = 0;
             else
-                $author['rate'] = $rate_value / $rate_count;
+                $author["rate"] = $rate_value / $rate_count;
             $relating = [];
             foreach ($author->genres()->get() as $genre) {
                 $related_book = Author::query()->whereHas('genres', function ($query) use ($genre) {
@@ -140,8 +140,8 @@ class AuthorController extends Controller
                     foreach ($related_book as $relate)
                         $relating[] = $relate->name;
             }
-            $author['related_author'] = array_diff(array_values(array_unique($relating)), array($author->name));
-            $author['reviews'] = $author->reviews()->wherePivot('enable', 1)->get();
+            $author["related_author"] = array_diff(array_values(array_unique($relating)), array($author->name));
+            $author["reviews"] = $author->reviews()->wherePivot('enable', 1)->get();
             return response()->json(['data' => ['author' => $author], 'result' => 1, 'description' => 'an author', 'message' => 'success']);
         }
         else{
@@ -151,9 +151,9 @@ class AuthorController extends Controller
 
     /**
      * Author Search
-     * 
-     * Search the specified author with his related tags, genres, books, name 
-     * 
+     *
+     * Search the specified author with his related tags, genres, books, name
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -161,13 +161,11 @@ class AuthorController extends Controller
     {
         $search = [];
         if($request->input('search')) {
-            $tags = Tag::query()->where('name', 'like', $request->input('search'))->get();
+            $tags = Tag::query()->where('taggable_type','App\Author')->where('tag_slug', 'like', $request->input('search'))->get();
             if (count($tags)) {
                 foreach ($tags as $tag) {
-                    $authors = Author::query()->whereHas('tags', function ($query) use ($tag) {
-                        $query->where('tag_id', $tag->id);
-                    })->distinct()->get();
-                    foreach ($authors as $author) {
+                    $author = Author::query()->find($tag->taggable_id);
+                    if($author) {
                         $author["genres"] = "";
                         $counter = 0;
                         foreach ($author->genres()->get() as $genre) {
@@ -189,9 +187,8 @@ class AuthorController extends Controller
                             $author['rate'] = 0;
                         else
                             $author['rate'] = $rate_value / $rate_count;
-                    }
-                    foreach ($authors as $author)
                         $search[] = $author;
+                    }
                 }
             }
             $genres = Genre::query()->where('name', 'like', $request->input('search'))->get();
@@ -288,7 +285,7 @@ class AuthorController extends Controller
                         $search[] = $author;
                 }
             }
-            else{
+            if(!count($tags) and !count($authors) and !count($books) and !count($genres)){
                 return response()->json(['data' => [], 'result' => 0, 'description' => 'there is no such an item', 'message' => 'موردی یافت نشد']);
             }
         }
